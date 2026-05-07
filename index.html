@@ -38,7 +38,7 @@
     .pay-desc { font-size: 14px; color: #94a3b8; text-align: center; line-height: 1.6; margin-bottom: 20px; }
     .pay-price { text-align: center; font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: #e94560; margin-bottom: 4px; }
     .pay-period { text-align: center; font-size: 14px; color: #64748b; margin-bottom: 24px; }
-    .pay-wa-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #25d366; border: none; border-radius: 12px; padding: 16px; color: #fff; font-size: 16px; font-weight: 700; font-family: 'Syne', sans-serif; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
+    .pay-wa-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #25d366; border: none; border-radius: 12px; padding: 16px; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
     .pay-note { font-size: 12px; color: #64748b; text-align: center; line-height: 1.6; }
     .pay-hours { background: rgba(255,193,7,0.1); border: 1px solid rgba(255,193,7,0.3); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #ffc107; text-align: center; margin-top: 12px; }
     .pay-logout { background: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; color: #64748b; font-size: 13px; cursor: pointer; width: 100%; margin-top: 16px; }
@@ -95,7 +95,7 @@
     .admin-user-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
     .admin-user-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
     .admin-user-status { font-size: 12px; color: #94a3b8; margin-bottom: 12px; }
-    .admin-approve-btn { background: linear-gradient(135deg, #7c3aed, #e94560); border: none; border-radius: 8px; padding: 8px 16px; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; margin-right: 8px; }
+    .admin-approve-btn { background: linear-gradient(135deg, #7c3aed, #e94560); border: none; border-radius: 8px; padding: 8px 16px; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; margin-right: 8px; margin-bottom: 4px; }
     .admin-revoke-btn { background: rgba(233,69,96,0.15); border: 1px solid rgba(233,69,96,0.3); border-radius: 8px; padding: 8px 16px; color: #e94560; font-size: 13px; cursor: pointer; }
     .admin-back { background: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 20px; color: #94a3b8; font-size: 14px; cursor: pointer; margin-bottom: 20px; }
     .admin-empty { text-align: center; color: #4a5568; padding: 40px 0; font-size: 14px; }
@@ -127,8 +127,8 @@
       <div class="auth-error" id="login-error"></div>
       <div class="field"><label>Username</label><input id="login-user" type="text" placeholder="Your username" autocomplete="off" /></div>
       <div class="field"><label>Password</label><input id="login-pass" type="password" placeholder="Your password" /></div>
-      <button class="auth-btn" onclick="doLogin()">Login →</button>
-      <div class="auth-switch">Don't have an account? <a onclick="showScreen('register')">Register here</a></div>
+      <button class="auth-btn" id="login-btn">Login →</button>
+      <div class="auth-switch">Don't have an account? <a id="go-register">Register here</a></div>
     </div>
   </div>
 
@@ -139,11 +139,11 @@
       <div class="auth-sub">You're never alone.</div>
       <div class="auth-title">Create Account 🚀</div>
       <div class="auth-error" id="reg-error"></div>
-      <div class="field"><label>Username</label><input id="reg-user" type="text" placeholder="Choose a username" autocomplete="off" /></div>
-      <div class="field"><label>Password</label><input id="reg-pass" type="password" placeholder="Choose a password" /></div>
+      <div class="field"><label>Username</label><input id="reg-user" type="text" placeholder="Choose a username (letters, numbers, _)" autocomplete="off" /></div>
+      <div class="field"><label>Password</label><input id="reg-pass" type="password" placeholder="Min 4 characters" /></div>
       <div class="field"><label>Confirm Password</label><input id="reg-pass2" type="password" placeholder="Repeat password" /></div>
-      <button class="auth-btn" onclick="doRegister()">Create Account →</button>
-      <div class="auth-switch">Already have an account? <a onclick="showScreen('login')">Login here</a></div>
+      <button class="auth-btn" id="reg-btn">Create Account →</button>
+      <div class="auth-switch">Already have an account? <a id="go-login">Login here</a></div>
     </div>
   </div>
 
@@ -153,14 +153,14 @@
       <div class="pay-card">
         <div class="pay-icon">💬</div>
         <div class="pay-title">Activate Your Account</div>
-        <div class="pay-desc">Pay Rs. 100 to chat for 30 days. Send us a WhatsApp message to get started!</div>
+        <div class="pay-desc">Pay Rs. 100 to chat for 30 days!</div>
         <div class="pay-price">Rs. 100</div>
         <div class="pay-period">30 days unlimited chatting</div>
         <a id="wa-pay-btn" class="pay-wa-btn" target="_blank">💚 Contact via WhatsApp</a>
         <div class="pay-note">We'll activate your account after confirming your payment.</div>
         <div class="pay-hours">⏰ Activation hours: 10:00 AM – 3:00 PM daily</div>
       </div>
-      <button class="pay-logout" onclick="doLogout()">← Logout</button>
+      <button class="pay-logout" id="pay-logout-btn">← Logout</button>
     </div>
   </div>
 
@@ -170,11 +170,11 @@
       <div class="badge"><span class="green-dot"></span><span id="online-count">0</span> people online now</div>
       <div class="user-info-bar">
         <span>👋 <strong id="display-username"></strong><span class="days-badge" id="days-left-badge"></span></span>
-        <button class="logout-mini" onclick="doLogout()">Logout</button>
+        <button class="logout-mini" id="landing-logout-btn">Logout</button>
       </div>
       <h1 class="hero">You're<br><span class="hero-accent">never</span><br>alone.</h1>
       <p class="sub">Talk to a real stranger. No login. No judgment. Just humans being human.</p>
-      <button class="cta-btn" onclick="startMatching()"><span>Start Chatting</span><span>→</span></button>
+      <button class="cta-btn" id="start-chat-btn"><span>Start Chatting</span><span>→</span></button>
     </div>
     <div class="ad-panel">
       <div class="ad-inner">
@@ -207,8 +207,8 @@
         </div>
       </div>
       <div class="header-btns">
-        <button class="new-btn" onclick="startMatching()">New</button>
-        <button class="end-btn" onclick="disconnect()">End</button>
+        <button class="new-btn" id="new-chat-btn">New</button>
+        <button class="end-btn" id="end-chat-btn">End</button>
       </div>
     </div>
     <div class="ad-bar" id="ad-bar">
@@ -217,19 +217,19 @@
         <span class="ad-bar-text"><strong>Your Brand Here</strong> — Reach thousands daily</span>
         <span class="ad-email">ads@notalone.chat</span>
       </div>
-      <button class="ad-close" onclick="document.getElementById('ad-bar').style.display='none'">×</button>
+      <button class="ad-close" id="ad-close-btn">×</button>
     </div>
     <div class="messages" id="messages"></div>
     <div class="input-row">
-      <input id="msg-input" placeholder="Type a message..." maxlength="500" onkeydown="if(event.key==='Enter') sendMessage()" />
-      <button class="send-btn" onclick="sendMessage()">➤</button>
+      <input id="msg-input" placeholder="Type a message..." maxlength="500" />
+      <button class="send-btn" id="send-btn">➤</button>
     </div>
   </div>
 
   <!-- ADMIN -->
   <div id="admin" class="screen">
     <div class="admin-wrap">
-      <button class="admin-back" onclick="doLogout()">← Logout</button>
+      <button class="admin-back" id="admin-logout-btn">← Logout</button>
       <div class="admin-title">🛡️ Admin Panel</div>
       <div id="admin-users-list"><div class="admin-empty">Loading...</div></div>
     </div>
@@ -237,11 +237,11 @@
 
 </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, set, get, push, onValue, remove, onDisconnect, update }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
+<script>
   const firebaseConfig = {
     apiKey: "AIzaSyDWORZEMwgOOXOt2QteyKAl8teSoYYteEM",
     authDomain: "notalone-chat.firebaseapp.com",
@@ -252,12 +252,12 @@
     appId: "1:935305184354:web:a4f5f95d1654d8131d3d3b"
   };
 
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
   const ADMIN_USER = "admin";
   const ADMIN_PASS = "notalone2024admin";
   const WA_NUMBER = "94765273733";
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
 
   let currentUser = null;
   let mySessionId = "s_" + Math.random().toString(36).substr(2, 9);
@@ -265,6 +265,7 @@
   let msgListener = null;
   let roomListener = null;
 
+  // Dots animation
   let dots = 1;
   setInterval(() => {
     dots = (dots % 3) + 1;
@@ -272,22 +273,48 @@
     if (el) el.textContent = "Finding someone" + ".".repeat(dots);
   }, 500);
 
-  onValue(ref(db, "online"), snap => {
+  // Online count
+  db.ref("online").on("value", snap => {
     const el = document.getElementById("online-count");
-    if (el) el.textContent = (snap.size || 0).toLocaleString();
+    if (el) el.textContent = (snap.numChildren() || 0).toLocaleString();
   });
 
-  window.showScreen = (name) => {
+  // Show screen
+  function showScreen(name) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(name).classList.add('active');
-  };
+  }
 
-  window.doLogin = async () => {
+  function showErr(elId, msg) {
+    const el = document.getElementById(elId);
+    el.textContent = msg;
+    el.style.display = "block";
+  }
+
+  function hideErr(elId) {
+    const el = document.getElementById(elId);
+    el.style.display = "none";
+  }
+
+  // Button events
+  document.getElementById("go-register").onclick = () => showScreen("register");
+  document.getElementById("go-login").onclick = () => showScreen("login");
+  document.getElementById("pay-logout-btn").onclick = doLogout;
+  document.getElementById("landing-logout-btn").onclick = doLogout;
+  document.getElementById("admin-logout-btn").onclick = doLogout;
+  document.getElementById("start-chat-btn").onclick = startMatching;
+  document.getElementById("new-chat-btn").onclick = startMatching;
+  document.getElementById("end-chat-btn").onclick = () => { cleanupRoom(); showScreen("landing"); };
+  document.getElementById("ad-close-btn").onclick = () => document.getElementById("ad-bar").style.display = "none";
+  document.getElementById("send-btn").onclick = sendMessage;
+  document.getElementById("msg-input").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
+
+  document.getElementById("login-btn").onclick = async function() {
     const username = document.getElementById("login-user").value.trim().toLowerCase();
     const password = document.getElementById("login-pass").value;
-    const errEl = document.getElementById("login-error");
-    errEl.style.display = "none";
-    if (!username || !password) { showErr(errEl, "Please fill all fields."); return; }
+    hideErr("login-error");
+
+    if (!username || !password) { showErr("login-error", "Please fill all fields."); return; }
 
     if (username === ADMIN_USER && password === ADMIN_PASS) {
       currentUser = { username: "admin", isAdmin: true };
@@ -296,29 +323,37 @@
       return;
     }
 
-    const snap = await get(ref(db, `users/${username}`));
-    if (!snap.exists()) { showErr(errEl, "Username not found."); return; }
+    const snap = await db.ref("users/" + username).get();
+    if (!snap.exists()) { showErr("login-error", "Username not found."); return; }
     const user = snap.val();
-    if (user.password !== btoa(password)) { showErr(errEl, "Wrong password."); return; }
+    if (user.password !== btoa(password)) { showErr("login-error", "Wrong password."); return; }
     currentUser = { username, ...user };
     afterLogin();
   };
 
-  window.doRegister = async () => {
+  document.getElementById("reg-btn").onclick = async function() {
     const username = document.getElementById("reg-user").value.trim().toLowerCase();
     const password = document.getElementById("reg-pass").value;
     const password2 = document.getElementById("reg-pass2").value;
-    const errEl = document.getElementById("reg-error");
-    errEl.style.display = "none";
-    if (!username || !password) { showErr(errEl, "Please fill all fields."); return; }
-    if (username.length < 3) { showErr(errEl, "Username must be at least 3 characters."); return; }
-    if (password.length < 4) { showErr(errEl, "Password must be at least 4 characters."); return; }
-    if (password !== password2) { showErr(errEl, "Passwords don't match."); return; }
-    if (username === ADMIN_USER) { showErr(errEl, "Username not available."); return; }
-    if (!/^[a-z0-9_]+$/.test(username)) { showErr(errEl, "Only letters, numbers, underscore allowed."); return; }
-    const snap = await get(ref(db, `users/${username}`));
-    if (snap.exists()) { showErr(errEl, "Username already taken."); return; }
-    await set(ref(db, `users/${username}`), { password: btoa(password), createdAt: Date.now(), active: false, expiresAt: 0 });
+    hideErr("reg-error");
+
+    if (!username || !password || !password2) { showErr("reg-error", "Please fill all fields."); return; }
+    if (username.length < 3) { showErr("reg-error", "Username must be at least 3 characters."); return; }
+    if (password.length < 4) { showErr("reg-error", "Password must be at least 4 characters."); return; }
+    if (password !== password2) { showErr("reg-error", "Passwords don't match."); return; }
+    if (username === ADMIN_USER) { showErr("reg-error", "Username not available."); return; }
+    if (!/^[a-z0-9_]+$/.test(username)) { showErr("reg-error", "Only lowercase letters, numbers, underscore."); return; }
+
+    const snap = await db.ref("users/" + username).get();
+    if (snap.exists()) { showErr("reg-error", "Username already taken. Try another."); return; }
+
+    await db.ref("users/" + username).set({
+      password: btoa(password),
+      createdAt: Date.now(),
+      active: false,
+      expiresAt: 0
+    });
+
     currentUser = { username, active: false, expiresAt: 0 };
     afterLogin();
   };
@@ -329,26 +364,25 @@
       const daysLeft = Math.ceil((currentUser.expiresAt - now) / (1000 * 60 * 60 * 24));
       document.getElementById("display-username").textContent = currentUser.username;
       document.getElementById("days-left-badge").textContent = daysLeft + " days left";
-      const myOnlineRef = ref(db, `online/${mySessionId}`);
-      set(myOnlineRef, true);
-      onDisconnect(myOnlineRef).remove();
+      db.ref("online/" + mySessionId).set(true);
+      db.ref("online/" + mySessionId).onDisconnect().remove();
       showScreen("landing");
     } else {
-      const msg = encodeURIComponent(`Hello! I want to activate my NotAlone account.\n\nUsername: ${currentUser.username}\n\nPlease send me payment details 🙏`);
-      document.getElementById("wa-pay-btn").href = `https://wa.me/${WA_NUMBER}?text=${msg}`;
+      const msg = encodeURIComponent("Hello! I want to activate my NotAlone account.\n\nUsername: " + currentUser.username + "\n\nPlease send me payment details 🙏");
+      document.getElementById("wa-pay-btn").href = "https://wa.me/" + WA_NUMBER + "?text=" + msg;
       showScreen("payment");
     }
   }
 
-  window.doLogout = async () => {
-    if (roomId) await cleanupRoom();
-    await remove(ref(db, `online/${mySessionId}`));
+  function doLogout() {
+    cleanupRoom();
+    db.ref("online/" + mySessionId).remove();
     currentUser = null;
     showScreen("login");
-  };
+  }
 
-  window.loadAdminUsers = () => {
-    onValue(ref(db, "users"), snap => {
+  function loadAdminUsers() {
+    db.ref("users").on("value", snap => {
       const list = document.getElementById("admin-users-list");
       if (!snap.exists()) { list.innerHTML = '<div class="admin-empty">No users yet.</div>'; return; }
       const users = snap.val();
@@ -358,78 +392,89 @@
         const active = data.active && data.expiresAt > now;
         const expired = data.active && data.expiresAt <= now;
         const daysLeft = active ? Math.ceil((data.expiresAt - now) / (1000 * 60 * 60 * 24)) : 0;
-        const statusText = active ? `<span class="status-active">● Active (${daysLeft} days left)</span>`
-          : expired ? `<span class="status-expired">● Expired</span>`
-          : `<span class="status-pending">● Pending Payment</span>`;
-        html += `<div class="admin-user-card">
-          <div class="admin-user-name">@${uname}</div>
-          <div class="admin-user-status">${statusText}</div>
-          <button class="admin-approve-btn" onclick="approveUser('${uname}')">✅ Approve 30 days</button>
-          <button class="admin-revoke-btn" onclick="revokeUser('${uname}')">🚫 Revoke</button>
-        </div>`;
+        const statusText = active
+          ? '<span class="status-active">● Active (' + daysLeft + ' days left)</span>'
+          : expired
+          ? '<span class="status-expired">● Expired</span>'
+          : '<span class="status-pending">● Pending Payment</span>';
+        html += '<div class="admin-user-card">'
+          + '<div class="admin-user-name">@' + uname + '</div>'
+          + '<div class="admin-user-status">' + statusText + '</div>'
+          + '<button class="admin-approve-btn" onclick="approveUser(\'' + uname + '\')">✅ Approve 30 days</button>'
+          + '<button class="admin-revoke-btn" onclick="revokeUser(\'' + uname + '\')">🚫 Revoke</button>'
+          + '</div>';
       });
       list.innerHTML = html || '<div class="admin-empty">No users yet.</div>';
     });
-  };
+  }
 
-  window.approveUser = async (uname) => {
+  function approveUser(uname) {
     const expiresAt = Date.now() + (30 * 24 * 60 * 60 * 1000);
-    await update(ref(db, `users/${uname}`), { active: true, expiresAt });
-    alert(`✅ @${uname} approved for 30 days!`);
-  };
+    db.ref("users/" + uname).update({ active: true, expiresAt: expiresAt });
+    alert("✅ @" + uname + " approved for 30 days!");
+  }
 
-  window.revokeUser = async (uname) => {
-    await update(ref(db, `users/${uname}`), { active: false, expiresAt: 0 });
-    alert(`🚫 @${uname} revoked.`);
-  };
+  function revokeUser(uname) {
+    db.ref("users/" + uname).update({ active: false, expiresAt: 0 });
+    alert("🚫 @" + uname + " revoked.");
+  }
 
-  window.startMatching = async () => {
-    if (roomId) await cleanupRoom();
+  async function startMatching() {
+    cleanupRoom();
     document.getElementById("messages").innerHTML = "";
     showScreen("matching");
-    const snap = await get(ref(db, "waiting"));
+
+    const snap = await db.ref("waiting").get();
     let matched = false;
+
     if (snap.exists()) {
       const waiters = Object.keys(snap.val()).filter(id => id !== mySessionId);
       if (waiters.length > 0) {
         const partnerId = waiters[0];
         const newRoomId = [mySessionId, partnerId].sort().join("_");
-        await remove(ref(db, `waiting/${partnerId}`));
+        await db.ref("waiting/" + partnerId).remove();
         roomId = newRoomId;
-        await set(ref(db, `rooms/${newRoomId}`), { users: { [mySessionId]: true, [partnerId]: true } });
+        await db.ref("rooms/" + newRoomId).set({ users: { [mySessionId]: true, [partnerId]: true } });
         matched = true;
         enterChat();
         return;
       }
     }
+
     if (!matched) {
-      await set(ref(db, `waiting/${mySessionId}`), { timestamp: Date.now() });
-      onDisconnect(ref(db, `waiting/${mySessionId}`)).remove();
-      roomListener = onValue(ref(db, "rooms"), snap => {
+      await db.ref("waiting/" + mySessionId).set({ timestamp: Date.now() });
+      db.ref("waiting/" + mySessionId).onDisconnect().remove();
+
+      roomListener = db.ref("rooms").on("value", snap => {
         if (!snap.exists()) return;
-        const entry = Object.entries(snap.val()).find(([, r]) => r.users && r.users[mySessionId]);
+        const rooms = snap.val();
+        const entry = Object.entries(rooms).find(([, r]) => r.users && r.users[mySessionId]);
         if (entry) {
           roomId = entry[0];
-          if (roomListener) { roomListener(); roomListener = null; }
+          if (roomListener) { db.ref("rooms").off("value", roomListener); roomListener = null; }
           enterChat();
         }
       });
     }
-  };
+  }
 
   function enterChat() {
     showScreen("chat");
     addMsg("system", "You are connected with a stranger. Say hi! 👋");
     document.getElementById("chat-status").textContent = "● Connected";
     document.getElementById("chat-status").style.color = "#4ade80";
-    msgListener = onValue(ref(db, `messages/${roomId}`), snap => {
+
+    msgListener = db.ref("messages/" + roomId).on("value", snap => {
       if (!snap.exists()) return;
       document.getElementById("messages").innerHTML = "";
       addMsg("system", "You are connected with a stranger. Say hi! 👋");
-      Object.values(snap.val()).sort((a, b) => a.timestamp - b.timestamp)
-        .forEach(m => addMsg(m.senderId === mySessionId ? "me" : "stranger", m.text));
+      const msgs = [];
+      snap.forEach(child => msgs.push(child.val()));
+      msgs.sort((a, b) => a.timestamp - b.timestamp)
+          .forEach(m => addMsg(m.senderId === mySessionId ? "me" : "stranger", m.text));
     });
-    onValue(ref(db, `rooms/${roomId}`), snap => {
+
+    db.ref("rooms/" + roomId).on("value", snap => {
       if (!snap.exists()) {
         addMsg("system", "Stranger has disconnected.");
         document.getElementById("chat-status").textContent = "● Disconnected";
@@ -442,31 +487,38 @@
   function addMsg(from, text) {
     const msgs = document.getElementById("messages");
     const div = document.createElement("div");
-    if (from === "system") { div.className = "sys-msg"; div.innerHTML = `<span class="sys-text">${text}</span>`; }
-    else if (from === "me") { div.className = "my-wrap"; div.innerHTML = `<div class="my-bubble">${text}</div>`; }
-    else { div.className = "their-wrap"; div.innerHTML = `<div class="their-bubble">${text}</div>`; }
+    if (from === "system") {
+      div.className = "sys-msg";
+      div.innerHTML = '<span class="sys-text">' + text + '</span>';
+    } else if (from === "me") {
+      div.className = "my-wrap";
+      div.innerHTML = '<div class="my-bubble">' + text + '</div>';
+    } else {
+      div.className = "their-wrap";
+      div.innerHTML = '<div class="their-bubble">' + text + '</div>';
+    }
     msgs.appendChild(div);
     msgs.scrollTop = msgs.scrollHeight;
   }
 
-  window.sendMessage = async () => {
+  function sendMessage() {
     const input = document.getElementById("msg-input");
     const text = input.value.trim();
     if (!text || !roomId) return;
     input.value = "";
-    await push(ref(db, `messages/${roomId}`), { senderId: mySessionId, text, timestamp: Date.now() });
-  };
-
-  window.disconnect = async () => { await cleanupRoom(); showScreen("landing"); };
-
-  async function cleanupRoom() {
-    if (roomId) { await remove(ref(db, `rooms/${roomId}`)); await remove(ref(db, `messages/${roomId}`)); roomId = null; }
-    await remove(ref(db, `waiting/${mySessionId}`));
-    if (msgListener) { msgListener(); msgListener = null; }
-    if (roomListener) { roomListener(); roomListener = null; }
+    db.ref("messages/" + roomId).push({ senderId: mySessionId, text: text, timestamp: Date.now() });
   }
 
-  function showErr(el, msg) { el.textContent = msg; el.style.display = "block"; }
+  function cleanupRoom() {
+    if (roomId) {
+      db.ref("rooms/" + roomId).remove();
+      db.ref("messages/" + roomId).remove();
+      roomId = null;
+    }
+    db.ref("waiting/" + mySessionId).remove();
+    if (msgListener) { db.ref("messages/" + roomId).off("value", msgListener); msgListener = null; }
+    if (roomListener) { db.ref("rooms").off("value", roomListener); roomListener = null; }
+  }
 </script>
 </body>
 </html>
