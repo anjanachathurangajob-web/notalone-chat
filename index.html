@@ -91,11 +91,11 @@
     #mi{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none}
     #mi::placeholder{color:#4a5568}
     .sb{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#e94560);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0}
-    #history{background:#0a0a12}
-    .ph{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
-    .ph-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
-    .ph-back{background:none;border:none;color:#7c3aed;font-size:14px;cursor:pointer}
-    .hl-list{flex:1;overflow-y:auto;padding:16px}
+    #history,#online-screen{background:#0a0a12}
+    .phead{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
+    .phead-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
+    .phead-back{background:none;border:none;color:#7c3aed;font-size:14px;cursor:pointer}
+    .plist{flex:1;overflow-y:auto;padding:16px}
     .hi{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;margin-bottom:10px}
     .hi.hid{opacity:.4}
     .hi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
@@ -105,17 +105,11 @@
     .hi-acts{display:flex;gap:8px;flex-wrap:wrap}
     .hi-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 12px;font-size:12px;color:#94a3b8;cursor:pointer}
     .hi-del{color:#e94560;border-color:rgba(233,69,96,.3);background:rgba(233,69,96,.1)}
-    .he{text-align:center;color:#4a5568;padding:60px 0;font-size:14px}
-    #online-screen{background:#0a0a12}
-    .oh{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
-    .oh-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
-    .oh-back{background:none;border:none;color:#7c3aed;font-size:14px;cursor:pointer}
-    .ol-list{flex:1;overflow-y:auto;padding:16px}
+    .pempty{text-align:center;color:#4a5568;padding:60px 0;font-size:14px}
     .ol-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;margin-bottom:10px}
     .ol-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#e94560);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
     .ol-name{font-weight:700;font-size:14px}
     .ol-st{font-size:11px;color:#4ade80}
-    .ol-empty{text-align:center;color:#4a5568;padding:60px 0;font-size:14px}
     .aw{position:relative;z-index:2;padding:40px 20px;flex:1;overflow-y:auto}
     .at{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px}
     .auc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;margin-bottom:12px}
@@ -125,7 +119,7 @@
     .arb{background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.3);border-radius:8px;padding:8px 16px;color:#e94560;font-size:13px;cursor:pointer}
     .ab{background:none;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 20px;color:#94a3b8;font-size:14px;cursor:pointer;margin-bottom:20px}
     .ae{text-align:center;color:#4a5568;padding:40px 0;font-size:14px}
-    .sa{color:#4ade80}.se{color:#e94560}.sp{color:#ffc107}
+    .sa{color:#4ade80}.se2{color:#e94560}.sp{color:#ffc107}
     @keyframes float1{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.05)}}
     @keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(15px)}}
     @keyframes float3{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
@@ -209,7 +203,7 @@
   <div id="chat" class="screen">
     <div class="ch">
       <div class="hl"><div class="av">👤</div>
-        <div><div class="sn">Anonymous Stranger</div><div class="ss" id="cs">● Connected</div></div>
+        <div><div class="sn" id="chat-stranger-name">Anonymous Stranger</div><div class="ss" id="cs">● Connected</div></div>
       </div>
       <div class="hb"><button class="nb" id="ncb">New</button><button class="eb" id="ecb">End</button></div>
     </div>
@@ -222,19 +216,19 @@
   </div>
 
   <div id="history" class="screen">
-    <div class="ph">
-      <div class="ph-title">💬 Chat History</div>
-      <button class="ph-back" id="hback">← Back</button>
+    <div class="phead">
+      <div class="phead-title">💬 Chat History</div>
+      <button class="phead-back" id="hback">← Back</button>
     </div>
-    <div class="hl-list" id="hlist"></div>
+    <div class="plist" id="hlist"></div>
   </div>
 
   <div id="online-screen" class="screen">
-    <div class="oh">
-      <div class="oh-title">👥 Online Users</div>
-      <button class="oh-back" id="oback">← Back</button>
+    <div class="phead">
+      <div class="phead-title">👥 Online Users</div>
+      <button class="phead-back" id="oback">← Back</button>
     </div>
-    <div class="ol-list" id="olist"></div>
+    <div class="plist" id="olist"></div>
   </div>
 
   <div id="admin" class="screen">
@@ -260,33 +254,43 @@
   });
   const db=firebase.database();
   const AU="admin",AP="notalone2024admin",WA="94765273733";
-  let cu=null,sid="s_"+Math.random().toString(36).substr(2,9),rid=null,ml=null,rl=null;
-  let curChat=[],curStranger=null,onlineRef=null;
+  let cu=null,sid="s_"+Math.random().toString(36).substr(2,9);
+  let rid=null,msgRef=null,roomRef=null,waitRef=null;
+  let curChat=[],curStranger=null;
 
   function ss(n){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(n).classList.add('active');}
   function se(id,m){const e=document.getElementById(id);e.textContent=m;e.style.display="block";}
   function he(id){document.getElementById(id).style.display="none";}
 
+  // Dots animation
   let d=1;
   setInterval(()=>{d=(d%3)+1;const e=document.getElementById("mtt");if(e)e.textContent="Finding someone"+".".repeat(d);},500);
-  db.ref("online").on("value",s=>{const e=document.getElementById("oc");if(e)e.textContent=(s.numChildren()||0).toLocaleString();});
 
-  // Auto-login on page load
+  // Online count
+  db.ref("online").on("value",snap=>{
+    const e=document.getElementById("oc");
+    if(e)e.textContent=(snap.numChildren()||0).toLocaleString();
+  });
+
+  // Auto-login
   window.addEventListener("load",async()=>{
-    const saved=localStorage.getItem("na_u");
-    const savedPass=localStorage.getItem("na_p");
-    if(!saved||!savedPass){ss("login");return;}
-    if(saved===AU){cu={username:AU,isAdmin:true};ss("admin");loadAdmin();return;}
+    const u=localStorage.getItem("na_u");
+    const p=localStorage.getItem("na_p");
+    if(!u||!p){ss("login");return;}
+    if(u===AU&&p===AP){cu={username:AU,isAdmin:true};ss("admin");loadAdmin();return;}
     try{
-      const snap=await db.ref("users/"+saved).get();
-      if(!snap.exists()){localStorage.removeItem("na_u");localStorage.removeItem("na_p");ss("login");return;}
+      const snap=await db.ref("users/"+u).get();
+      if(!snap.exists()){clearSession();ss("login");return;}
       const data=snap.val();
-      if(data.password!==savedPass){localStorage.removeItem("na_u");localStorage.removeItem("na_p");ss("login");return;}
-      cu={username:saved,...data};
-      afterLogin();
+      if(data.password!==p){clearSession();ss("login");return;}
+      cu={username:u,...data};
+      goLanding();
     }catch(e){ss("login");}
   });
 
+  function clearSession(){localStorage.removeItem("na_u");localStorage.removeItem("na_p");}
+
+  // Button bindings
   document.getElementById("tor").onclick=()=>ss("register");
   document.getElementById("tol").onclick=()=>ss("login");
   document.getElementById("plo").onclick=logout;
@@ -294,7 +298,7 @@
   document.getElementById("alo").onclick=logout;
   document.getElementById("scb").onclick=startMatch;
   document.getElementById("ncb").onclick=startMatch;
-  document.getElementById("ecb").onclick=()=>{saveChat();cleanup();ss("landing");};
+  document.getElementById("ecb").onclick=()=>{saveChat();cleanupChat();ss("landing");};
   document.getElementById("acb").onclick=()=>document.getElementById("adbar").style.display="none";
   document.getElementById("sndb").onclick=send;
   document.getElementById("mi").onkeydown=e=>{if(e.key==="Enter")send();};
@@ -303,6 +307,7 @@
   document.getElementById("onlinebtn").onclick=showOnline;
   document.getElementById("oback").onclick=()=>ss("landing");
 
+  // LOGIN
   document.getElementById("lb").onclick=async function(){
     const u=document.getElementById("lu").value.trim().toLowerCase();
     const p=document.getElementById("lp").value;
@@ -310,20 +315,20 @@
     if(!u||!p){se("le","Please fill all fields.");return;}
     if(u===AU&&p===AP){
       cu={username:AU,isAdmin:true};
-      localStorage.setItem("na_u",AU);
-      localStorage.setItem("na_p",AP);
+      localStorage.setItem("na_u",AU);localStorage.setItem("na_p",AP);
       ss("admin");loadAdmin();return;
     }
     const snap=await db.ref("users/"+u).get();
     if(!snap.exists()){se("le","Username not found.");return;}
     const data=snap.val();
-    if(data.password!==btoa(p)){se("le","Wrong password.");return;}
+    const encoded=btoa(p);
+    if(data.password!==encoded){se("le","Wrong password.");return;}
     cu={username:u,...data};
-    localStorage.setItem("na_u",u);
-    localStorage.setItem("na_p",btoa(p));
-    afterLogin();
+    localStorage.setItem("na_u",u);localStorage.setItem("na_p",encoded);
+    goLanding();
   };
 
+  // REGISTER
   document.getElementById("rb").onclick=async function(){
     const u=document.getElementById("ru").value.trim().toLowerCase();
     const p=document.getElementById("rp").value;
@@ -340,17 +345,17 @@
     const encoded=btoa(p);
     await db.ref("users/"+u).set({password:encoded,createdAt:Date.now(),active:false,expiresAt:0});
     cu={username:u,active:false,expiresAt:0};
-    localStorage.setItem("na_u",u);
-    localStorage.setItem("na_p",encoded);
-    afterLogin();
+    localStorage.setItem("na_u",u);localStorage.setItem("na_p",encoded);
+    goLanding();
   };
 
-  function afterLogin(){
+  function goLanding(){
     const now=Date.now();
     if(cu.active&&cu.expiresAt>now){
       const days=Math.ceil((cu.expiresAt-now)/(1000*60*60*24));
       document.getElementById("du").textContent=cu.username;
       document.getElementById("dl").textContent=days+" days left";
+      // Set online with username
       db.ref("online/"+sid).set({username:cu.username,ts:Date.now()});
       db.ref("online/"+sid).onDisconnect().remove();
       ss("landing");
@@ -362,32 +367,39 @@
   }
 
   function logout(){
-    saveChat();cleanup();
+    saveChat();cleanupChat();
     db.ref("online/"+sid).remove();
-    localStorage.removeItem("na_u");
-    localStorage.removeItem("na_p");
-    cu=null;ss("login");
+    clearSession();cu=null;ss("login");
   }
 
+  // SAVE CHAT HISTORY
   function saveChat(){
     if(!curChat.length||!curStranger)return;
     const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h.unshift({id:Date.now(),stranger:curStranger,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),msgs:curChat,hidden:false});
+    h.unshift({
+      id:Date.now(),
+      stranger:curStranger,
+      date:new Date().toLocaleDateString(),
+      time:new Date().toLocaleTimeString(),
+      msgs:[...curChat],
+      hidden:false
+    });
     if(h.length>50)h.pop();
     localStorage.setItem("na_hist",JSON.stringify(h));
     curChat=[];curStranger=null;
   }
 
+  // SHOW HISTORY
   function showHistory(){
     ss("history");
     const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
     const list=document.getElementById("hlist");
-    if(!h.length){list.innerHTML='<div class="he">No chat history yet.</div>';return;}
+    if(!h.length){list.innerHTML='<div class="pempty">No chat history yet.<br>Start chatting to see your history here!</div>';return;}
     let html="";
     h.forEach((item,i)=>{
       const prev=item.msgs.length?item.msgs[item.msgs.length-1].text:"(empty)";
       html+=`<div class="hi${item.hidden?' hid':''}">
-        <div class="hi-top"><div class="hi-name">👤 ${item.stranger}</div><div class="hi-date">${item.date}</div></div>
+        <div class="hi-top"><div class="hi-name">👤 ${item.stranger}</div><div class="hi-date">${item.date} ${item.time}</div></div>
         <div class="hi-prev">${prev}</div>
         <div class="hi-acts">
           <button class="hi-btn" onclick="viewChat(${i})">👁 View</button>
@@ -401,11 +413,12 @@
 
   function viewChat(i){
     const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
-    const item=h[i]; if(!item)return;
+    const item=h[i];if(!item)return;
     document.getElementById("msgs").innerHTML="";
-    addMsg("system","Viewing: Chat with "+item.stranger+" on "+item.date);
+    document.getElementById("chat-stranger-name").textContent=item.stranger;
+    addMsg("system","Viewing chat with "+item.stranger+" on "+item.date);
     item.msgs.forEach(m=>addMsg(m.from,m.text));
-    document.getElementById("cs").textContent="● History";
+    document.getElementById("cs").textContent="● History View";
     document.getElementById("cs").style.color="#ffc107";
     rid=null;ss("chat");
   }
@@ -418,16 +431,17 @@
   }
 
   function delChat(i){
+    if(!confirm("Delete this chat?"))return;
     const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
     h.splice(i,1);
     localStorage.setItem("na_hist",JSON.stringify(h));
     showHistory();
   }
 
+  // ONLINE USERS
   function showOnline(){
     ss("online-screen");
-    if(onlineRef)db.ref("online").off("value",onlineRef);
-    onlineRef=db.ref("online").on("value",snap=>{
+    db.ref("online").on("value",snap=>{
       const list=document.getElementById("olist");
       let html="";
       if(snap.exists()){
@@ -435,13 +449,17 @@
           if(child.key===sid)return;
           const data=child.val();
           const uname=data.username||"Anonymous";
-          html+=`<div class="ol-item"><div class="ol-av">👤</div><div><div class="ol-name">${uname}</div><div class="ol-st">● Online now</div></div></div>`;
+          html+=`<div class="ol-item">
+            <div class="ol-av">👤</div>
+            <div><div class="ol-name">${uname}</div><div class="ol-st">● Online now</div></div>
+          </div>`;
         });
       }
-      list.innerHTML=html||'<div class="ol-empty">No one else online right now.</div>';
+      list.innerHTML=html||'<div class="pempty">No one else online right now.</div>';
     });
   }
 
+  // ADMIN
   function loadAdmin(){
     db.ref("users").on("value",snap=>{
       const list=document.getElementById("aul");
@@ -452,7 +470,10 @@
         const active=data.active&&data.expiresAt>now;
         const expired=data.active&&data.expiresAt<=now;
         const days=active?Math.ceil((data.expiresAt-now)/(1000*60*60*24)):0;
-        const st=active?'<span class="sa">● Active ('+days+' days)</span>':expired?'<span class="se">● Expired</span>':'<span class="sp">● Pending</span>';
+        const st=active
+          ?'<span class="sa">● Active ('+days+' days)</span>'
+          :expired?'<span class="se2">● Expired</span>'
+          :'<span class="sp">● Pending Payment</span>';
         html+='<div class="auc"><div class="aun">@'+u+'</div><div class="aus">'+st+'</div>'
           +'<button class="aab" onclick="approve(\''+u+'\')">✅ Approve 30 days</button>'
           +'<button class="arb" onclick="revoke(\''+u+'\')">🚫 Revoke</button></div>';
@@ -461,55 +482,65 @@
     });
   }
 
-  function approve(u){db.ref("users/"+u).update({active:true,expiresAt:Date.now()+(30*24*60*60*1000)});alert("✅ @"+u+" approved!");}
+  function approve(u){db.ref("users/"+u).update({active:true,expiresAt:Date.now()+(30*24*60*60*1000)});alert("✅ @"+u+" approved for 30 days!");}
   function revoke(u){db.ref("users/"+u).update({active:false,expiresAt:0});alert("🚫 @"+u+" revoked.");}
 
+  // MATCHING
   async function startMatch(){
-    saveChat();cleanup();
+    saveChat();cleanupChat();
     document.getElementById("msgs").innerHTML="";
-    curChat=[];curStranger="Stranger_"+Math.random().toString(36).substr(2,6);
+    curChat=[];
+    curStranger="Stranger_"+Math.random().toString(36).substr(2,6).toUpperCase();
+    document.getElementById("chat-stranger-name").textContent="Anonymous Stranger";
     ss("matching");
+
     const snap=await db.ref("waiting").get();
     let matched=false;
+
     if(snap.exists()){
       const ws=Object.keys(snap.val()).filter(id=>id!==sid);
       if(ws.length>0){
-        const pid=ws[0],nrid=[sid,pid].sort().join("_");
+        const pid=ws[0];
+        const nrid=[sid,pid].sort().join("_");
         await db.ref("waiting/"+pid).remove();
         rid=nrid;
         await db.ref("rooms/"+rid).set({users:{[sid]:true,[pid]:true}});
         matched=true;enterChat();return;
       }
     }
+
     if(!matched){
-      await db.ref("waiting/"+sid).set({timestamp:Date.now()});
+      await db.ref("waiting/"+sid).set({ts:Date.now()});
       db.ref("waiting/"+sid).onDisconnect().remove();
-      rl=db.ref("rooms").on("value",snap=>{
+      waitRef=db.ref("rooms").on("value",snap=>{
         if(!snap.exists())return;
-        const entry=Object.entries(snap.val()).find(([,r])=>r.users&&r.users[sid]);
-        if(entry){rid=entry[0];if(rl){db.ref("rooms").off("value",rl);rl=null;}enterChat();}
+        const entries=snap.val();
+        const found=Object.entries(entries).find(([,r])=>r.users&&r.users[sid]);
+        if(found){
+          rid=found[0];
+          if(waitRef){db.ref("rooms").off("value",waitRef);waitRef=null;}
+          enterChat();
+        }
       });
     }
   }
 
   function enterChat(){
     ss("chat");
-    addMsg("system","You are connected with a stranger. Say hi! 👋");
     document.getElementById("cs").textContent="● Connected";
     document.getElementById("cs").style.color="#4ade80";
-    ml=db.ref("messages/"+rid).on("value",snap=>{
-      if(!snap.exists())return;
-      document.getElementById("msgs").innerHTML="";
-      addMsg("system","You are connected with a stranger. Say hi! 👋");
-      curChat=[];
-      const arr=[];snap.forEach(c=>arr.push(c.val()));
-      arr.sort((a,b)=>a.timestamp-b.timestamp).forEach(m=>{
-        const from=m.sid===sid?"me":"stranger";
-        addMsg(from,m.text);
-        curChat.push({from,text:m.text});
-      });
+    addMsg("system","You are connected with a stranger. Say hi! 👋");
+
+    // Listen for new messages
+    msgRef=db.ref("messages/"+rid).on("child_added",snap=>{
+      const m=snap.val();
+      const from=m.sid===sid?"me":"stranger";
+      addMsg(from,m.text);
+      curChat.push({from,text:m.text});
     });
-    db.ref("rooms/"+rid).on("value",snap=>{
+
+    // Listen for disconnect
+    roomRef=db.ref("rooms/"+rid).on("value",snap=>{
       if(!snap.exists()){
         addMsg("system","Stranger has disconnected.");
         document.getElementById("cs").textContent="● Disconnected";
@@ -520,7 +551,8 @@
   }
 
   function addMsg(from,text){
-    const msgs=document.getElementById("msgs"),div=document.createElement("div");
+    const msgs=document.getElementById("msgs");
+    const div=document.createElement("div");
     if(from==="system"){div.className="sm";div.innerHTML='<span class="st">'+text+'</span>';}
     else if(from==="me"){div.className="mw";div.innerHTML='<div class="mb">'+text+'</div>';}
     else{div.className="tw";div.innerHTML='<div class="tb">'+text+'</div>';}
@@ -528,16 +560,23 @@
   }
 
   function send(){
-    const input=document.getElementById("mi"),text=input.value.trim();
-    if(!text||!rid)return;input.value="";
+    const input=document.getElementById("mi");
+    const text=input.value.trim();
+    if(!text||!rid)return;
+    input.value="";
     db.ref("messages/"+rid).push({sid,text,timestamp:Date.now()});
   }
 
-  function cleanup(){
-    if(rid){db.ref("rooms/"+rid).remove();db.ref("messages/"+rid).remove();rid=null;}
+  function cleanupChat(){
+    if(rid){
+      db.ref("rooms/"+rid).remove();
+      db.ref("messages/"+rid).remove();
+      if(msgRef)db.ref("messages/"+rid).off("child_added",msgRef);
+      if(roomRef)db.ref("rooms/"+rid).off("value",roomRef);
+      rid=null;msgRef=null;roomRef=null;
+    }
     db.ref("waiting/"+sid).remove();
-    if(ml){ml=null;}
-    if(rl){db.ref("rooms").off("value",rl);rl=null;}
+    if(waitRef){db.ref("rooms").off("value",waitRef);waitRef=null;}
   }
 </script>
 </body>
