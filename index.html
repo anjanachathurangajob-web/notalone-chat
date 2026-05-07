@@ -91,34 +91,31 @@
     #mi{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none}
     #mi::placeholder{color:#4a5568}
     .sb{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#e94560);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0}
-    /* HISTORY */
     #history{background:#0a0a12}
-    .hist-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
-    .hist-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
-    .hist-back{background:none;border:none;color:#7c3aed;font-size:14px;cursor:pointer}
-    .hist-list{flex:1;overflow-y:auto;padding:16px}
-    .hist-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer}
-    .hist-item.hidden-chat{opacity:.4}
-    .hist-item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-    .hist-item-name{font-weight:700;font-size:14px}
-    .hist-item-date{font-size:11px;color:#4a5568}
-    .hist-item-preview{font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .hist-item-actions{display:flex;gap:8px;margin-top:10px}
-    .hist-action-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 12px;font-size:12px;color:#94a3b8;cursor:pointer}
-    .hist-action-del{color:#e94560;border-color:rgba(233,69,96,.3);background:rgba(233,69,96,.1)}
-    .hist-empty{text-align:center;color:#4a5568;padding:60px 0;font-size:14px}
-    /* ONLINE USERS */
+    .ph{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
+    .ph-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
+    .ph-back{background:none;border:none;color:#7c3aed;font-size:14px;cursor:pointer}
+    .hl-list{flex:1;overflow-y:auto;padding:16px}
+    .hi{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+    .hi.hid{opacity:.4}
+    .hi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+    .hi-name{font-weight:700;font-size:14px}
+    .hi-date{font-size:11px;color:#4a5568}
+    .hi-prev{font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:10px}
+    .hi-acts{display:flex;gap:8px;flex-wrap:wrap}
+    .hi-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 12px;font-size:12px;color:#94a3b8;cursor:pointer}
+    .hi-del{color:#e94560;border-color:rgba(233,69,96,.3);background:rgba(233,69,96,.1)}
+    .he{text-align:center;color:#4a5568;padding:60px 0;font-size:14px}
     #online-screen{background:#0a0a12}
-    .online-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
-    .online-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
-    .online-back{background:none;border:none;color:#7c3aed;font-size:14px;cursor:pointer}
-    .online-list{flex:1;overflow-y:auto;padding:16px}
-    .online-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;margin-bottom:10px}
-    .online-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#e94560);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-    .online-name{font-weight:700;font-size:14px}
-    .online-status{font-size:11px;color:#4ade80}
-    .online-empty{text-align:center;color:#4a5568;padding:60px 0;font-size:14px}
-    /* ADMIN */
+    .oh{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
+    .oh-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
+    .oh-back{background:none;border:none;color:#7c3aed;font-size:14px;cursor:pointer}
+    .ol-list{flex:1;overflow-y:auto;padding:16px}
+    .ol-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+    .ol-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#e94560);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .ol-name{font-weight:700;font-size:14px}
+    .ol-st{font-size:11px;color:#4ade80}
+    .ol-empty{text-align:center;color:#4a5568;padding:60px 0;font-size:14px}
     .aw{position:relative;z-index:2;padding:40px 20px;flex:1;overflow-y:auto}
     .at{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px}
     .auc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;margin-bottom:12px}
@@ -141,7 +138,6 @@
 <div class="orbs"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
 <div id="app">
 
-  <!-- LOGIN -->
   <div id="login" class="screen active">
     <div class="wrap">
       <div class="logo">Not<span>Alone</span></div>
@@ -155,7 +151,6 @@
     </div>
   </div>
 
-  <!-- REGISTER -->
   <div id="register" class="screen">
     <div class="wrap">
       <div class="logo">Not<span>Alone</span></div>
@@ -170,7 +165,6 @@
     </div>
   </div>
 
-  <!-- PAYMENT -->
   <div id="payment" class="screen">
     <div class="pay-wrap">
       <div class="pay-card">
@@ -187,7 +181,6 @@
     </div>
   </div>
 
-  <!-- LANDING -->
   <div id="landing" class="screen">
     <div class="land-content">
       <div class="badge"><span class="gdot"></span><span id="oc">0</span> people online now</div>
@@ -206,7 +199,6 @@
     </div></div>
   </div>
 
-  <!-- MATCHING -->
   <div id="matching" class="screen">
     <div class="mc"><div class="pr"></div><div class="pc">👤</div>
       <p class="mt" id="mtt">Finding someone...</p>
@@ -214,7 +206,6 @@
     </div>
   </div>
 
-  <!-- CHAT -->
   <div id="chat" class="screen">
     <div class="ch">
       <div class="hl"><div class="av">👤</div>
@@ -230,25 +221,22 @@
     <div class="ir"><input id="mi" placeholder="Type a message..." maxlength="500"/><button class="sb" id="sndb">➤</button></div>
   </div>
 
-  <!-- CHAT HISTORY -->
   <div id="history" class="screen">
-    <div class="hist-header">
-      <div class="hist-title">💬 Chat History</div>
-      <button class="hist-back" id="hist-back-btn">← Back</button>
+    <div class="ph">
+      <div class="ph-title">💬 Chat History</div>
+      <button class="ph-back" id="hback">← Back</button>
     </div>
-    <div class="hist-list" id="hist-list"></div>
+    <div class="hl-list" id="hlist"></div>
   </div>
 
-  <!-- ONLINE USERS -->
   <div id="online-screen" class="screen">
-    <div class="online-header">
-      <div class="online-title">👥 Online Users</div>
-      <button class="online-back" id="online-back-btn">← Back</button>
+    <div class="oh">
+      <div class="oh-title">👥 Online Users</div>
+      <button class="oh-back" id="oback">← Back</button>
     </div>
-    <div class="online-list" id="online-list"></div>
+    <div class="ol-list" id="olist"></div>
   </div>
 
-  <!-- ADMIN -->
   <div id="admin" class="screen">
     <div class="aw"><button class="ab" id="alo">← Logout</button>
       <div class="at">🛡️ Admin Panel</div>
@@ -273,36 +261,31 @@
   const db=firebase.database();
   const AU="admin",AP="notalone2024admin",WA="94765273733";
   let cu=null,sid="s_"+Math.random().toString(36).substr(2,9),rid=null,ml=null,rl=null;
-  let currentChatHistory=[];
-  let currentStrangerSession=null;
+  let curChat=[],curStranger=null,onlineRef=null;
 
-  // Load saved session
-  const savedSession=localStorage.getItem("na_session");
-  if(savedSession){
-    try{ cu=JSON.parse(savedSession); }catch(e){ cu=null; }
-  }
+  function ss(n){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(n).classList.add('active');}
+  function se(id,m){const e=document.getElementById(id);e.textContent=m;e.style.display="block";}
+  function he(id){document.getElementById(id).style.display="none";}
 
   let d=1;
-  setInterval(()=>{ d=(d%3)+1; const e=document.getElementById("mtt"); if(e) e.textContent="Finding someone"+".".repeat(d); },500);
-  db.ref("online").on("value",s=>{ const e=document.getElementById("oc"); if(e) e.textContent=(s.numChildren()||0).toLocaleString(); });
+  setInterval(()=>{d=(d%3)+1;const e=document.getElementById("mtt");if(e)e.textContent="Finding someone"+".".repeat(d);},500);
+  db.ref("online").on("value",s=>{const e=document.getElementById("oc");if(e)e.textContent=(s.numChildren()||0).toLocaleString();});
 
-  function ss(n){ document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active')); document.getElementById(n).classList.add('active'); }
-  function se(id,m){ const e=document.getElementById(id); e.textContent=m; e.style.display="block"; }
-  function he(id){ document.getElementById(id).style.display="none"; }
-
-  // Auto login if session exists
-  window.addEventListener("load",()=>{
-    if(cu && cu.username){
-      if(cu.username===AU && cu.isAdmin){ ss("admin"); loadAdmin(); }
-      else{ refreshUserAndLogin(); }
-    }
+  // Auto-login on page load
+  window.addEventListener("load",async()=>{
+    const saved=localStorage.getItem("na_u");
+    const savedPass=localStorage.getItem("na_p");
+    if(!saved||!savedPass){ss("login");return;}
+    if(saved===AU){cu={username:AU,isAdmin:true};ss("admin");loadAdmin();return;}
+    try{
+      const snap=await db.ref("users/"+saved).get();
+      if(!snap.exists()){localStorage.removeItem("na_u");localStorage.removeItem("na_p");ss("login");return;}
+      const data=snap.val();
+      if(data.password!==savedPass){localStorage.removeItem("na_u");localStorage.removeItem("na_p");ss("login");return;}
+      cu={username:saved,...data};
+      afterLogin();
+    }catch(e){ss("login");}
   });
-
-  async function refreshUserAndLogin(){
-    const snap=await db.ref("users/"+cu.username).get();
-    if(snap.exists()){ cu={...cu,...snap.val()}; localStorage.setItem("na_session",JSON.stringify(cu)); }
-    afterLogin();
-  }
 
   document.getElementById("tor").onclick=()=>ss("register");
   document.getElementById("tol").onclick=()=>ss("login");
@@ -311,27 +294,33 @@
   document.getElementById("alo").onclick=logout;
   document.getElementById("scb").onclick=startMatch;
   document.getElementById("ncb").onclick=startMatch;
-  document.getElementById("ecb").onclick=()=>{ saveCurrentChat(); cleanup(); ss("landing"); };
+  document.getElementById("ecb").onclick=()=>{saveChat();cleanup();ss("landing");};
   document.getElementById("acb").onclick=()=>document.getElementById("adbar").style.display="none";
   document.getElementById("sndb").onclick=send;
-  document.getElementById("mi").onkeydown=e=>{ if(e.key==="Enter") send(); };
+  document.getElementById("mi").onkeydown=e=>{if(e.key==="Enter")send();};
   document.getElementById("histbtn").onclick=showHistory;
-  document.getElementById("hist-back-btn").onclick=()=>ss("landing");
-  document.getElementById("onlinebtn").onclick=showOnlineUsers;
-  document.getElementById("online-back-btn").onclick=()=>ss("landing");
+  document.getElementById("hback").onclick=()=>ss("landing");
+  document.getElementById("onlinebtn").onclick=showOnline;
+  document.getElementById("oback").onclick=()=>ss("landing");
 
   document.getElementById("lb").onclick=async function(){
     const u=document.getElementById("lu").value.trim().toLowerCase();
     const p=document.getElementById("lp").value;
     he("le");
     if(!u||!p){se("le","Please fill all fields.");return;}
-    if(u===AU&&p===AP){cu={username:"admin",isAdmin:true};localStorage.setItem("na_session",JSON.stringify(cu));ss("admin");loadAdmin();return;}
+    if(u===AU&&p===AP){
+      cu={username:AU,isAdmin:true};
+      localStorage.setItem("na_u",AU);
+      localStorage.setItem("na_p",AP);
+      ss("admin");loadAdmin();return;
+    }
     const snap=await db.ref("users/"+u).get();
     if(!snap.exists()){se("le","Username not found.");return;}
     const data=snap.val();
     if(data.password!==btoa(p)){se("le","Wrong password.");return;}
     cu={username:u,...data};
-    localStorage.setItem("na_session",JSON.stringify(cu));
+    localStorage.setItem("na_u",u);
+    localStorage.setItem("na_p",btoa(p));
     afterLogin();
   };
 
@@ -348,9 +337,11 @@
     if(!/^[a-z0-9_]+$/.test(u)){se("re","Only lowercase letters, numbers, underscore.");return;}
     const snap=await db.ref("users/"+u).get();
     if(snap.exists()){se("re","Username already taken.");return;}
-    await db.ref("users/"+u).set({password:btoa(p),createdAt:Date.now(),active:false,expiresAt:0});
+    const encoded=btoa(p);
+    await db.ref("users/"+u).set({password:encoded,createdAt:Date.now(),active:false,expiresAt:0});
     cu={username:u,active:false,expiresAt:0};
-    localStorage.setItem("na_session",JSON.stringify(cu));
+    localStorage.setItem("na_u",u);
+    localStorage.setItem("na_p",encoded);
     afterLogin();
   };
 
@@ -360,62 +351,48 @@
       const days=Math.ceil((cu.expiresAt-now)/(1000*60*60*24));
       document.getElementById("du").textContent=cu.username;
       document.getElementById("dl").textContent=days+" days left";
-      db.ref("online/"+sid).set({username:cu.username,timestamp:Date.now()});
+      db.ref("online/"+sid).set({username:cu.username,ts:Date.now()});
       db.ref("online/"+sid).onDisconnect().remove();
       ss("landing");
     } else {
-      const msg=encodeURIComponent("Hello! I want to activate my NotAlone account.\n\nUsername: "+cu.username+"\n\nPlease send me payment details 🙏");
+      const msg=encodeURIComponent("Hello! I want to activate my NotAlone account.\n\nUsername: "+cu.username+"\n\nPlease send payment details 🙏");
       document.getElementById("wab").href="https://wa.me/"+WA+"?text="+msg;
       ss("payment");
     }
   }
 
   function logout(){
-    saveCurrentChat();
-    cleanup();
+    saveChat();cleanup();
     db.ref("online/"+sid).remove();
-    localStorage.removeItem("na_session");
-    cu=null;
-    ss("login");
+    localStorage.removeItem("na_u");
+    localStorage.removeItem("na_p");
+    cu=null;ss("login");
   }
 
-  // CHAT HISTORY
-  function saveCurrentChat(){
-    if(currentChatHistory.length===0||!currentStrangerSession) return;
-    const histories=JSON.parse(localStorage.getItem("na_histories")||"[]");
-    histories.unshift({
-      id:Date.now(),
-      stranger:currentStrangerSession,
-      date:new Date().toLocaleDateString(),
-      time:new Date().toLocaleTimeString(),
-      messages:currentChatHistory,
-      hidden:false
-    });
-    // Keep max 50 histories
-    if(histories.length>50) histories.pop();
-    localStorage.setItem("na_histories",JSON.stringify(histories));
-    currentChatHistory=[];
-    currentStrangerSession=null;
+  function saveChat(){
+    if(!curChat.length||!curStranger)return;
+    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
+    h.unshift({id:Date.now(),stranger:curStranger,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),msgs:curChat,hidden:false});
+    if(h.length>50)h.pop();
+    localStorage.setItem("na_hist",JSON.stringify(h));
+    curChat=[];curStranger=null;
   }
 
   function showHistory(){
     ss("history");
-    const histories=JSON.parse(localStorage.getItem("na_histories")||"[]");
-    const list=document.getElementById("hist-list");
-    if(histories.length===0){ list.innerHTML='<div class="hist-empty">No chat history yet.</div>'; return; }
+    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
+    const list=document.getElementById("hlist");
+    if(!h.length){list.innerHTML='<div class="he">No chat history yet.</div>';return;}
     let html="";
-    histories.forEach((h,i)=>{
-      const preview=h.messages.length>0?h.messages[h.messages.length-1].text:"(no messages)";
-      html+=`<div class="hist-item${h.hidden?' hidden-chat':''}" id="hi${i}">
-        <div class="hist-item-top">
-          <div class="hist-item-name">👤 ${h.stranger}</div>
-          <div class="hist-item-date">${h.date} ${h.time}</div>
-        </div>
-        <div class="hist-item-preview">${preview}</div>
-        <div class="hist-item-actions">
-          <button class="hist-action-btn" onclick="viewChat(${i})">👁 View</button>
-          <button class="hist-action-btn" onclick="toggleHide(${i})">${h.hidden?'👁 Show':'🙈 Hide'}</button>
-          <button class="hist-action-btn hist-action-del" onclick="deleteChat(${i})">🗑 Delete</button>
+    h.forEach((item,i)=>{
+      const prev=item.msgs.length?item.msgs[item.msgs.length-1].text:"(empty)";
+      html+=`<div class="hi${item.hidden?' hid':''}">
+        <div class="hi-top"><div class="hi-name">👤 ${item.stranger}</div><div class="hi-date">${item.date}</div></div>
+        <div class="hi-prev">${prev}</div>
+        <div class="hi-acts">
+          <button class="hi-btn" onclick="viewChat(${i})">👁 View</button>
+          <button class="hi-btn" onclick="toggleHide(${i})">${item.hidden?'👁 Show':'🙈 Hide'}</button>
+          <button class="hi-btn hi-del" onclick="delChat(${i})">🗑 Delete</button>
         </div>
       </div>`;
     });
@@ -423,52 +400,45 @@
   }
 
   function viewChat(i){
-    const histories=JSON.parse(localStorage.getItem("na_histories")||"[]");
-    const h=histories[i];
-    if(!h) return;
-    currentChatHistory=[];
-    currentStrangerSession=h.stranger;
+    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
+    const item=h[i]; if(!item)return;
     document.getElementById("msgs").innerHTML="";
-    addMsg("system","Chat with "+h.stranger+" on "+h.date);
-    h.messages.forEach(m=>addMsg(m.from,m.text));
-    document.getElementById("cs").textContent="● Viewing History";
+    addMsg("system","Viewing: Chat with "+item.stranger+" on "+item.date);
+    item.msgs.forEach(m=>addMsg(m.from,m.text));
+    document.getElementById("cs").textContent="● History";
     document.getElementById("cs").style.color="#ffc107";
-    rid=null;
-    ss("chat");
+    rid=null;ss("chat");
   }
 
   function toggleHide(i){
-    const histories=JSON.parse(localStorage.getItem("na_histories")||"[]");
-    histories[i].hidden=!histories[i].hidden;
-    localStorage.setItem("na_histories",JSON.stringify(histories));
+    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
+    h[i].hidden=!h[i].hidden;
+    localStorage.setItem("na_hist",JSON.stringify(h));
     showHistory();
   }
 
-  function deleteChat(i){
-    const histories=JSON.parse(localStorage.getItem("na_histories")||"[]");
-    histories.splice(i,1);
-    localStorage.setItem("na_histories",JSON.stringify(histories));
+  function delChat(i){
+    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
+    h.splice(i,1);
+    localStorage.setItem("na_hist",JSON.stringify(h));
     showHistory();
   }
 
-  // ONLINE USERS
-  function showOnlineUsers(){
+  function showOnline(){
     ss("online-screen");
-    db.ref("online").on("value",snap=>{
-      const list=document.getElementById("online-list");
-      if(!snap.exists()||snap.numChildren()===0){ list.innerHTML='<div class="online-empty">No one else online right now.</div>'; return; }
+    if(onlineRef)db.ref("online").off("value",onlineRef);
+    onlineRef=db.ref("online").on("value",snap=>{
+      const list=document.getElementById("olist");
       let html="";
-      snap.forEach(child=>{
-        const data=child.val();
-        const uname=data.username||"Anonymous";
-        if(child.key!==sid){
-          html+=`<div class="online-item">
-            <div class="online-avatar">👤</div>
-            <div><div class="online-name">${uname}</div><div class="online-status">● Online</div></div>
-          </div>`;
-        }
-      });
-      list.innerHTML=html||'<div class="online-empty">No one else online right now.</div>';
+      if(snap.exists()){
+        snap.forEach(child=>{
+          if(child.key===sid)return;
+          const data=child.val();
+          const uname=data.username||"Anonymous";
+          html+=`<div class="ol-item"><div class="ol-av">👤</div><div><div class="ol-name">${uname}</div><div class="ol-st">● Online now</div></div></div>`;
+        });
+      }
+      list.innerHTML=html||'<div class="ol-empty">No one else online right now.</div>';
     });
   }
 
@@ -476,13 +446,13 @@
     db.ref("users").on("value",snap=>{
       const list=document.getElementById("aul");
       if(!snap.exists()){list.innerHTML='<div class="ae">No users yet.</div>';return;}
-      const now=Date.now(); let html="";
+      const now=Date.now();let html="";
       snap.forEach(child=>{
         const u=child.key,data=child.val();
         const active=data.active&&data.expiresAt>now;
         const expired=data.active&&data.expiresAt<=now;
         const days=active?Math.ceil((data.expiresAt-now)/(1000*60*60*24)):0;
-        const st=active?'<span class="sa">● Active ('+days+' days)</span>':expired?'<span class="se">● Expired</span>':'<span class="sp">● Pending Payment</span>';
+        const st=active?'<span class="sa">● Active ('+days+' days)</span>':expired?'<span class="se">● Expired</span>':'<span class="sp">● Pending</span>';
         html+='<div class="auc"><div class="aun">@'+u+'</div><div class="aus">'+st+'</div>'
           +'<button class="aab" onclick="approve(\''+u+'\')">✅ Approve 30 days</button>'
           +'<button class="arb" onclick="revoke(\''+u+'\')">🚫 Revoke</button></div>';
@@ -491,15 +461,13 @@
     });
   }
 
-  function approve(u){ db.ref("users/"+u).update({active:true,expiresAt:Date.now()+(30*24*60*60*1000)}); alert("✅ @"+u+" approved for 30 days!"); }
-  function revoke(u){ db.ref("users/"+u).update({active:false,expiresAt:0}); alert("🚫 @"+u+" revoked."); }
+  function approve(u){db.ref("users/"+u).update({active:true,expiresAt:Date.now()+(30*24*60*60*1000)});alert("✅ @"+u+" approved!");}
+  function revoke(u){db.ref("users/"+u).update({active:false,expiresAt:0});alert("🚫 @"+u+" revoked.");}
 
   async function startMatch(){
-    saveCurrentChat();
-    cleanup();
+    saveChat();cleanup();
     document.getElementById("msgs").innerHTML="";
-    currentChatHistory=[];
-    currentStrangerSession="Stranger_"+Math.random().toString(36).substr(2,6);
+    curChat=[];curStranger="Stranger_"+Math.random().toString(36).substr(2,6);
     ss("matching");
     const snap=await db.ref("waiting").get();
     let matched=false;
@@ -510,7 +478,7 @@
         await db.ref("waiting/"+pid).remove();
         rid=nrid;
         await db.ref("rooms/"+rid).set({users:{[sid]:true,[pid]:true}});
-        matched=true; enterChat(); return;
+        matched=true;enterChat();return;
       }
     }
     if(!matched){
@@ -519,7 +487,7 @@
       rl=db.ref("rooms").on("value",snap=>{
         if(!snap.exists())return;
         const entry=Object.entries(snap.val()).find(([,r])=>r.users&&r.users[sid]);
-        if(entry){ rid=entry[0]; if(rl){db.ref("rooms").off("value",rl);rl=null;} enterChat(); }
+        if(entry){rid=entry[0];if(rl){db.ref("rooms").off("value",rl);rl=null;}enterChat();}
       });
     }
   }
@@ -533,12 +501,12 @@
       if(!snap.exists())return;
       document.getElementById("msgs").innerHTML="";
       addMsg("system","You are connected with a stranger. Say hi! 👋");
-      currentChatHistory=[];
-      const arr=[]; snap.forEach(c=>arr.push(c.val()));
+      curChat=[];
+      const arr=[];snap.forEach(c=>arr.push(c.val()));
       arr.sort((a,b)=>a.timestamp-b.timestamp).forEach(m=>{
         const from=m.sid===sid?"me":"stranger";
         addMsg(from,m.text);
-        currentChatHistory.push({from,text:m.text});
+        curChat.push({from,text:m.text});
       });
     });
     db.ref("rooms/"+rid).on("value",snap=>{
@@ -546,8 +514,7 @@
         addMsg("system","Stranger has disconnected.");
         document.getElementById("cs").textContent="● Disconnected";
         document.getElementById("cs").style.color="#ef4444";
-        saveCurrentChat();
-        rid=null;
+        saveChat();rid=null;
       }
     });
   }
@@ -557,19 +524,19 @@
     if(from==="system"){div.className="sm";div.innerHTML='<span class="st">'+text+'</span>';}
     else if(from==="me"){div.className="mw";div.innerHTML='<div class="mb">'+text+'</div>';}
     else{div.className="tw";div.innerHTML='<div class="tb">'+text+'</div>';}
-    msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
+    msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
   }
 
   function send(){
     const input=document.getElementById("mi"),text=input.value.trim();
-    if(!text||!rid)return; input.value="";
-    db.ref("messages/"+rid).push({sid:sid,text:text,timestamp:Date.now()});
+    if(!text||!rid)return;input.value="";
+    db.ref("messages/"+rid).push({sid,text,timestamp:Date.now()});
   }
 
   function cleanup(){
     if(rid){db.ref("rooms/"+rid).remove();db.ref("messages/"+rid).remove();rid=null;}
     db.ref("waiting/"+sid).remove();
-    if(ml){db.ref("messages/"+rid).off("value",ml);ml=null;}
+    if(ml){ml=null;}
     if(rl){db.ref("rooms").off("value",rl);rl=null;}
   }
 </script>
