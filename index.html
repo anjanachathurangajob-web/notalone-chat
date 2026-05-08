@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Not Alone Chat</title>
+    <title>Not Alone - Admin Access</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, push, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAtN7nwhc1XrYa8mGNLMQlKicFj-f5yG0k",
@@ -22,81 +22,137 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // --- ඔයා ඉල්ලපු අලුත් ADMIN විස්තර ---
+        const ADMIN_USER = "admin"; 
+        const ADMIN_PASS = "arasubaanjana"; 
+
         window.handleLogin = async () => {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
-            if(!user || !pass) return alert("කරුණාකර විස්තර පුරවන්න.");
+
+            if(!user || !pass) return alert("විස්තර ඇතුළත් කරන්න.");
+
+            // Admin කෙනෙක්ද කියා පරීක්ෂා කිරීම
+            if(user === ADMIN_USER && pass === ADMIN_PASS) {
+                localStorage.setItem('isAdmin', 'true');
+                showAdminPanel();
+                return;
+            }
 
             const userRef = ref(db, 'users/' + user);
             const snapshot = await get(userRef);
 
             if (!snapshot.exists()) {
-                // මෙතනදී තමයි WhatsApp එකට මැසේජ් එක යවන්නේ
                 await set(userRef, { password: pass, isPaid: false });
-                
-                const waText = `Hello Anjana, I want to join Not Alone Chat.\n\nUsername: ${user}\nPassword: ${pass}`;
-                const waLink = `https://wa.me/94773364401?text=${encodeURIComponent(waText)}`;
-                
-                // WhatsApp window එක විවෘත කිරීම
-                window.location.href = waLink; 
+                window.location.href = `https://wa.me/94773364401?text=New Register: ${user}`;
             } else {
                 const userData = snapshot.val();
-                if(userData.password === pass && userData.isPaid === true) {
-                    localStorage.setItem('chatUser', user);
-                    location.reload();
-                } else {
-                    alert("ඔබේ ගිණුම තවම සක්‍රිය නැත (isPaid: false). Admin අමතන්න.");
-                }
+                if(userData.password === pass) {
+                    if(userData.isPaid) {
+                        localStorage.setItem('chatUser', user);
+                        location.reload();
+                    } else { alert("Approve කර නැත. රු. 100 ගෙවා Admin අමතන්න."); }
+                } else { alert("මුරපදය වැරදියි!"); }
             }
         };
 
-        // චැට් එකේ ඉතිරි කොටස්...
-        if(localStorage.getItem('chatUser')) {
-            document.addEventListener("DOMContentLoaded", () => {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('chat-box').classList.remove('hidden');
-                onValue(ref(db, 'chat'), (s) => {
-                    const b = document.getElementById('messages'); b.innerHTML = "";
-                    s.forEach(c => {
-                        const m = c.val();
-                        const isMe = m.user === localStorage.getItem('chatUser');
-                        b.innerHTML += `<div class="flex ${isMe ? 'justify-end' : 'justify-start'} mb-2">
-                            <div class="${isMe ? 'bg-blue-600' : 'bg-slate-700'} p-3 rounded-2xl max-w-[80%] shadow">
-                                <p class="text-[10px] font-bold text-blue-300">${m.user}</p>
-                                <p class="text-sm">${m.text}</p>
-                            </div></div>`;
-                    });
-                    b.scrollTop = b.scrollHeight;
+        // Admin Dashboard එක පෙන්වීම
+        function showAdminPanel() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-panel').classList.remove('hidden');
+            
+            onValue(ref(db, 'users'), (snapshot) => {
+                const list = document.getElementById('user-list');
+                list.innerHTML = "";
+                snapshot.forEach(child => {
+                    const name = child.key;
+                    const data = child.val();
+                    if(name !== ADMIN_USER) { // Admin ව ලැයිස්තුවේ පෙන්වන්න එපා
+                        list.innerHTML += `
+                            <div class="flex justify-between items-center p-4 bg-slate-700 mb-3 rounded-xl border border-slate-600">
+                                <div>
+                                    <p class="font-bold text-white">${name}</p>
+                                    <p class="text-[10px] text-gray-400">${data.isPaid ? 'සක්‍රියයි' : 'අක්‍රියයි'}</p>
+                                </div>
+                                <button onclick="approveUser('${name}')" class="${data.isPaid ? 'bg-green-600' : 'bg-blue-600'} px-4 py-2 rounded-lg text-xs font-bold transition-all">
+                                    ${data.isPaid ? 'Approved ✓' : 'Approve Now'}
+                                </button>
+                            </div>`;
+                    }
                 });
             });
-            window.sendMsg = () => {
-                const t = document.getElementById('msgInput').value;
-                if(t) push(ref(db, 'chat'), { user: localStorage.getItem('chatUser'), text: t });
-                document.getElementById('msgInput').value = "";
-            };
         }
+
+        window.approveUser = (name) => {
+            update(ref(db, 'users/' + name), { isPaid: true });
+        };
+
+        if(localStorage.getItem('isAdmin')) showAdminPanel();
+        if(localStorage.getItem('chatUser')) showChat();
+
+        function showChat() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('chat-screen').classList.remove('hidden');
+            onValue(ref(db, 'chat'), (s) => {
+                const b = document.getElementById('messages'); b.innerHTML = "";
+                s.forEach(c => {
+                    const m = c.val();
+                    const isMe = m.u === localStorage.getItem('chatUser');
+                    b.innerHTML += `<div class="flex ${isMe ? 'justify-end' : 'justify-start'} mb-2">
+                        <div class="${isMe ? 'bg-blue-600' : 'bg-slate-700'} p-3 rounded-2xl max-w-[80%]">
+                            <p class="text-[10px] font-bold text-blue-300">${m.u}</p>
+                            <p class="text-sm">${m.t}</p>
+                        </div></div>`;
+                });
+                b.scrollTop = b.scrollHeight;
+            });
+        }
+
+        window.send = () => {
+            const t = document.getElementById('msg').value;
+            if(t) push(ref(db, 'chat'), { u: localStorage.getItem('chatUser'), t: t });
+            document.getElementById('msg').value = "";
+        };
+
     </script>
 </head>
-<body class="bg-slate-900 text-white h-screen flex flex-col font-sans">
-    <div id="login-box" class="flex-1 flex items-center justify-center p-6">
-        <div class="bg-slate-800 p-8 rounded-3xl w-full max-w-sm shadow-2xl border border-slate-700">
-            <h1 class="text-3xl font-bold text-center text-blue-400 mb-6 italic">Not Alone</h1>
-            <input type="text" id="username" placeholder="User Name" class="w-full bg-slate-700 p-4 rounded-xl mb-4 outline-none border border-slate-600 focus:border-blue-500">
-            <input type="password" id="password" placeholder="Password" class="w-full bg-slate-700 p-4 rounded-xl mb-6 outline-none border border-slate-600 focus:border-blue-500">
-            <button onclick="handleLogin()" class="w-full bg-blue-600 py-4 rounded-xl font-bold hover:bg-blue-500">Login / Register</button>
-            <p class="text-[10px] text-gray-500 text-center mt-6 uppercase">Register වුණු පසු WhatsApp එකට Redirect වේවි.</p>
+<body class="bg-slate-900 text-white font-sans h-screen flex flex-col overflow-hidden">
+
+    <div id="login-screen" class="flex-1 flex items-center justify-center p-6">
+        <div class="bg-slate-800 p-8 rounded-[2rem] w-full max-w-sm shadow-2xl border border-slate-700">
+            <h1 class="text-3xl font-bold text-center text-blue-400 mb-2 italic tracking-tight">Not Alone</h1>
+            <p class="text-center text-gray-500 text-[10px] mb-8 uppercase tracking-widest">Official Admin & Chat Access</p>
+            <div class="space-y-4">
+                <input id="username" placeholder="User Name" class="w-full bg-slate-900 p-4 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 transition-all">
+                <input id="password" type="password" placeholder="Password" class="w-full bg-slate-900 p-4 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 transition-all">
+                <button onclick="handleLogin()" class="w-full bg-blue-600 py-4 rounded-2xl font-bold hover:bg-blue-500 shadow-lg shadow-blue-900/20 active:scale-95 transition-all">Login / Register</button>
+            </div>
         </div>
     </div>
-    <div id="chat-box" class="hidden h-screen flex flex-col">
+
+    <div id="admin-panel" class="hidden flex-1 flex flex-col p-6 overflow-hidden">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-blue-400">Admin Panel</h2>
+                <p class="text-xs text-gray-500">සීල් දාපු අය සහ අලුත් අය පාලනය කරන්න</p>
+            </div>
+            <button onclick="localStorage.clear(); location.reload();" class="bg-slate-800 p-3 rounded-2xl text-red-500 font-bold border border-slate-700">Logout</button>
+        </div>
+        <div id="user-list" class="flex-1 overflow-y-auto pr-2">
+            </div>
+    </div>
+
+    <div id="chat-screen" class="hidden flex flex-col h-full overflow-hidden">
         <div class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
             <h2 class="font-bold text-blue-400 italic">Not Alone</h2>
-            <button onclick="localStorage.clear(); location.reload();" class="text-xs bg-slate-700 px-3 py-1 rounded-full text-red-400">Logout</button>
+            <button onclick="localStorage.clear(); location.reload();" class="text-xs bg-red-900/30 px-4 py-2 rounded-full text-red-400">Logout</button>
         </div>
         <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-2"></div>
-        <div class="p-4 bg-slate-800 flex gap-2">
-            <input type="text" id="msgInput" placeholder="Message..." class="flex-1 bg-slate-700 p-3 rounded-xl outline-none">
-            <button onclick="sendMsg()" class="bg-blue-600 px-6 py-3 rounded-xl font-bold">Send</button>
+        <div class="p-4 bg-slate-900 border-t border-slate-800 flex gap-2">
+            <input id="msg" placeholder="Type a message..." class="flex-1 bg-slate-800 p-4 rounded-2xl outline-none border border-slate-700">
+            <button onclick="send()" class="bg-blue-600 px-8 py-4 rounded-2xl font-bold">Send</button>
         </div>
     </div>
+
 </body>
 </html>
