@@ -1,625 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NotAlone — You're Never Alone</title>
-  <link rel="manifest" href="/manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'DM Sans',sans-serif;background:#0a0a12;color:#fff;min-height:100vh;overflow-x:hidden}
-    #app{max-width:430px;margin:0 auto;min-height:100vh}
-    .screen{display:none;min-height:100vh}
-    .screen.active{display:flex;flex-direction:column}
-    .bg{position:fixed;inset:0;background:radial-gradient(ellipse at 20% 10%,#1a0a2e 0%,#0a0a12 60%);z-index:0;pointer-events:none}
-    .orbs{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-    .orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.35}
-    .orb1{width:220px;height:220px;background:#7c3aed;top:-60px;right:-60px;animation:float1 6s ease-in-out infinite}
-    .orb2{width:160px;height:160px;background:#2563eb;bottom:200px;left:-40px;animation:float2 8s ease-in-out infinite}
-    .orb3{width:100px;height:100px;background:#e94560;top:42%;right:20px;animation:float3 5s ease-in-out infinite}
-    /* AUTH */
-    .wrap{position:relative;z-index:2;padding:60px 28px 40px;flex:1;display:flex;flex-direction:column;justify-content:center}
-    .logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;margin-bottom:8px}
-    .logo span{color:#e94560}
-    .logo-sub{font-size:14px;color:#64748b;margin-bottom:40px}
-    .title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;margin-bottom:24px}
-    .field{margin-bottom:16px}
-    .field label{font-size:12px;color:#94a3b8;letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:8px}
-    .field input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none}
-    .field input::placeholder{color:#4a5568}
-    .btn{width:100%;background:linear-gradient(135deg,#7c3aed,#e94560);border:none;border-radius:12px;padding:16px;color:#fff;font-size:16px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;margin-top:8px;margin-bottom:16px}
-    .link-row{text-align:center;font-size:14px;color:#64748b}
-    .link-row a{color:#7c3aed;cursor:pointer}
-    .err{background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:#e94560;margin-bottom:16px;display:none}
-    /* PAYMENT */
-    .pay-wrap{position:relative;z-index:2;padding:60px 28px 40px;flex:1;display:flex;flex-direction:column}
-    .pay-card{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(124,58,237,.3);border-radius:20px;padding:28px;margin-bottom:20px}
-    .pay-icon{font-size:48px;margin-bottom:16px;text-align:center}
-    .pay-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;text-align:center;margin-bottom:8px}
-    .pay-desc{font-size:14px;color:#94a3b8;text-align:center;line-height:1.6;margin-bottom:20px}
-    .pay-price{text-align:center;font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:#e94560;margin-bottom:4px}
-    .pay-period{text-align:center;font-size:14px;color:#64748b;margin-bottom:24px}
-    .wa-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#25d366;border:none;border-radius:12px;padding:16px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;text-decoration:none}
-    .pay-note{font-size:12px;color:#64748b;text-align:center;line-height:1.6}
-    .pay-hours{background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:#ffc107;text-align:center;margin-top:12px}
-    .pay-logout{background:none;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px;color:#64748b;font-size:13px;cursor:pointer;width:100%;margin-top:16px}
-    /* LANDING */
-    .land-content{position:relative;z-index:2;padding:60px 28px 32px;flex:1}
-    .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:6px 14px;font-size:12px;color:#a0aec0;margin-bottom:20px}
-    .gdot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80;display:inline-block}
-    .ubar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 16px;margin-bottom:20px;font-size:13px;color:#94a3b8}
-    .dbadge{background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.3);border-radius:8px;padding:3px 10px;font-size:11px;color:#4ade80;margin-left:8px}
-    .lout{background:none;border:none;color:#e94560;font-size:12px;cursor:pointer}
-    .hero{font-family:'Syne',sans-serif;font-size:52px;font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:16px}
-    .hero span{color:#e94560}
-    .sub{font-size:15px;color:#94a3b8;line-height:1.6;margin-bottom:24px;font-weight:300}
-    .cta{display:flex;align-items:center;justify-content:space-between;width:100%;background:linear-gradient(135deg,#7c3aed,#e94560);border:none;border-radius:16px;padding:18px 24px;color:#fff;font-size:18px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;margin-bottom:12px}
-    .sec-btn{display:flex;align-items:center;justify-content:space-between;width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px 24px;color:#fff;font-size:15px;cursor:pointer;margin-bottom:8px}
-    .ad-panel{position:relative;z-index:2;margin:0 16px 24px}
-    .ad-inner{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(233,69,96,.3);border-radius:14px;padding:16px 18px}
-    .ad-tag{font-size:10px;color:#e94560;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;font-weight:700}
-    .ad-brand{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px}
-    .ad-line{font-size:13px;color:#94a3b8;margin-bottom:8px}
-    .ad-contact{font-size:12px;color:#e94560}
-    /* MATCHING */
-    #matching{align-items:center;justify-content:center}
-    .mc{position:relative;z-index:2;text-align:center}
-    .pr{width:100px;height:100px;border-radius:50%;background:rgba(124,58,237,.3);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 1.5s ease-out infinite}
-    .pc{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#e94560);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 24px;position:relative}
-    .mt{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px;min-width:220px}
-    .ms{font-size:14px;color:#64748b}
-    /* CHAT */
-    #chat{background:#0a0a12}
-    .ch{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
-    .hl{display:flex;align-items:center;gap:12px}
-    .av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#e94560);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-    .sn{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
-    .ss{font-size:11px;color:#4ade80}
-    .hb{display:flex;gap:8px}
-    .nb{background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);color:#7c3aed;border-radius:8px;padding:7px 13px;font-size:13px;cursor:pointer}
-    .eb{background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.3);color:#e94560;border-radius:8px;padding:7px 13px;font-size:13px;cursor:pointer}
-    .adb{background:linear-gradient(90deg,#1a1a2e,#16213e);border-bottom:1px solid rgba(233,69,96,.2);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-    .adbi{display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap}
-    .adts{background:#e94560;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:1px;flex-shrink:0}
-    .adbt{font-size:12px;color:#94a3b8}
-    .ade{font-size:11px;color:#7c3aed}
-    .adc{background:none;border:none;color:#4a5568;font-size:18px;cursor:pointer;padding:0 4px}
-    .msgs{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:10px;min-height:200px}
-    .sm{text-align:center}
-    .st{font-size:12px;color:#4a5568;background:rgba(255,255,255,.04);padding:6px 14px;border-radius:20px;display:inline-block}
-    .mw{display:flex;justify-content:flex-end;animation:fu .2s ease}
-    .tw{display:flex;justify-content:flex-start;animation:fu .2s ease}
-    .mb{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:12px 16px;border-radius:18px 18px 4px 18px;max-width:78%;font-size:15px;line-height:1.5;word-break:break-word}
-    .tb{background:rgba(255,255,255,.08);color:#e2e8f0;padding:12px 16px;border-radius:18px 18px 18px 4px;max-width:78%;font-size:15px;line-height:1.5;border:1px solid rgba(255,255,255,.06);word-break:break-word}
-    .ir{display:flex;gap:10px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.98);position:sticky;bottom:0}
-    #mi{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none}
-    #mi::placeholder{color:#4a5568}
-    .sb{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#e94560);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0}
-    /* HISTORY & ONLINE */
-    #history,#online-screen{background:#0a0a12}
-    .phead{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
-    .phead-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
-    .phead-back{background:none;border:none;color:#7c3aed;font-size:14px;cursor:pointer}
-    .plist{flex:1;overflow-y:auto;padding:16px}
-    .hi{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;margin-bottom:10px}
-    .hi.hid{opacity:.4}
-    .hi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-    .hi-name{font-weight:700;font-size:14px}
-    .hi-date{font-size:11px;color:#4a5568}
-    .hi-prev{font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:10px}
-    .hi-acts{display:flex;gap:8px;flex-wrap:wrap}
-    .hi-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 12px;font-size:12px;color:#94a3b8;cursor:pointer}
-    .hi-del{color:#e94560;border-color:rgba(233,69,96,.3);background:rgba(233,69,96,.1)}
-    .pempty{text-align:center;color:#4a5568;padding:60px 0;font-size:14px}
-    .ol-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;margin-bottom:10px}
-    .ol-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#e94560);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-    .ol-name{font-weight:700;font-size:14px}
-    .ol-st{font-size:11px;color:#4ade80}
-    /* ADMIN */
-    .aw{position:relative;z-index:2;padding:40px 20px;flex:1;overflow-y:auto}
-    .at{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px}
-    .auc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;margin-bottom:12px}
-    .aun{font-weight:700;font-size:15px;margin-bottom:4px}
-    .aus{font-size:12px;color:#94a3b8;margin-bottom:12px}
-    .aab{background:linear-gradient(135deg,#7c3aed,#e94560);border:none;border-radius:8px;padding:8px 16px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;margin-right:8px;margin-bottom:4px}
-    .arb{background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.3);border-radius:8px;padding:8px 16px;color:#e94560;font-size:13px;cursor:pointer}
-    .ab{background:none;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 20px;color:#94a3b8;font-size:14px;cursor:pointer;margin-bottom:20px}
-    .ae{text-align:center;color:#4a5568;padding:40px 0;font-size:14px}
-    .sa{color:#4ade80}.se2{color:#e94560}.sp{color:#ffc107}
-    @keyframes float1{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.05)}}
-    @keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(15px)}}
-    @keyframes float3{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-    @keyframes pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.5);opacity:0}}
-    @keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not Alone Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAtN7nwhc1XrYa8mGNLMQlKicFj-f5yG0k",
+            authDomain: "notalonewithgemini.firebaseapp.com",
+            projectId: "notalonewithgemini",
+            databaseURL: "https://notalonewithgemini-default-rtdb.firebaseio.com",
+            storageBucket: "notalonewithgemini.firebasestorage.app",
+            messagingSenderId: "541160542822",
+            appId: "1:541160542822:web:12570e417ed92c3f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.handleLogin = async () => {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            if(!user || !pass) return alert("කරුණාකර විස්තර පුරවන්න.");
+
+            const userRef = ref(db, 'users/' + user);
+            const snapshot = await get(userRef);
+
+            if (!snapshot.exists()) {
+                // මෙතනදී තමයි WhatsApp එකට මැසේජ් එක යවන්නේ
+                await set(userRef, { password: pass, isPaid: false });
+                
+                const waText = `Hello Anjana, I want to join Not Alone Chat.\n\nUsername: ${user}\nPassword: ${pass}`;
+                const waLink = `https://wa.me/94773364401?text=${encodeURIComponent(waText)}`;
+                
+                // WhatsApp window එක විවෘත කිරීම
+                window.location.href = waLink; 
+            } else {
+                const userData = snapshot.val();
+                if(userData.password === pass && userData.isPaid === true) {
+                    localStorage.setItem('chatUser', user);
+                    location.reload();
+                } else {
+                    alert("ඔබේ ගිණුම තවම සක්‍රිය නැත (isPaid: false). Admin අමතන්න.");
+                }
+            }
+        };
+
+        // චැට් එකේ ඉතිරි කොටස්...
+        if(localStorage.getItem('chatUser')) {
+            document.addEventListener("DOMContentLoaded", () => {
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('chat-box').classList.remove('hidden');
+                onValue(ref(db, 'chat'), (s) => {
+                    const b = document.getElementById('messages'); b.innerHTML = "";
+                    s.forEach(c => {
+                        const m = c.val();
+                        const isMe = m.user === localStorage.getItem('chatUser');
+                        b.innerHTML += `<div class="flex ${isMe ? 'justify-end' : 'justify-start'} mb-2">
+                            <div class="${isMe ? 'bg-blue-600' : 'bg-slate-700'} p-3 rounded-2xl max-w-[80%] shadow">
+                                <p class="text-[10px] font-bold text-blue-300">${m.user}</p>
+                                <p class="text-sm">${m.text}</p>
+                            </div></div>`;
+                    });
+                    b.scrollTop = b.scrollHeight;
+                });
+            });
+            window.sendMsg = () => {
+                const t = document.getElementById('msgInput').value;
+                if(t) push(ref(db, 'chat'), { user: localStorage.getItem('chatUser'), text: t });
+                document.getElementById('msgInput').value = "";
+            };
+        }
+    </script>
 </head>
-<body>
-<div class="bg"></div>
-<div class="orbs"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
-<div id="app">
-
-  <!-- LOGIN -->
-  <div id="login" class="screen active">
-    <div class="wrap">
-      <div class="logo">Not<span>Alone</span></div>
-      <div class="logo-sub">You're never alone.</div>
-      <div class="title">Welcome back 👋</div>
-      <div class="err" id="le"></div>
-      <div class="field"><label>Username</label><input id="lu" type="text" placeholder="Your username" autocomplete="off"/></div>
-      <div class="field"><label>Password</label><input id="lp" type="password" placeholder="Your password"/></div>
-      <button class="btn" id="lb">Login →</button>
-      <div class="link-row">Don't have an account? <a id="tor">Register here</a></div>
-    </div>
-  </div>
-
-  <!-- REGISTER -->
-  <div id="register" class="screen">
-    <div class="wrap">
-      <div class="logo">Not<span>Alone</span></div>
-      <div class="logo-sub">You're never alone.</div>
-      <div class="title">Create Account 🚀</div>
-      <div class="err" id="re"></div>
-      <div class="field"><label>Username</label><input id="ru" type="text" placeholder="lowercase, numbers, _" autocomplete="off"/></div>
-      <div class="field"><label>Password</label><input id="rp" type="password" placeholder="Min 4 characters"/></div>
-      <div class="field"><label>Confirm Password</label><input id="rp2" type="password" placeholder="Repeat password"/></div>
-      <button class="btn" id="rb">Create Account →</button>
-      <div class="link-row">Already have an account? <a id="tol">Login here</a></div>
-    </div>
-  </div>
-
-  <!-- PAYMENT -->
-  <div id="payment" class="screen">
-    <div class="pay-wrap">
-      <div class="pay-card">
-        <div class="pay-icon">💬</div>
-        <div class="pay-title">Activate Your Account</div>
-        <div class="pay-desc">Pay Rs. 100 to chat for 30 days!</div>
-        <div class="pay-price">Rs. 100</div>
-        <div class="pay-period">30 days unlimited chatting</div>
-        <a id="wab" class="wa-btn" target="_blank">💚 Contact via WhatsApp</a>
-        <div class="pay-note">We'll activate your account after confirming payment.</div>
-        <div class="pay-hours">⏰ Activation hours: 10:00 AM – 3:00 PM daily</div>
-      </div>
-      <button class="pay-logout" id="plo">← Logout</button>
-    </div>
-  </div>
-
-  <!-- LANDING -->
-  <div id="landing" class="screen">
-    <div class="land-content">
-      <div class="badge"><span class="gdot"></span><span id="oc">0</span> people online now</div>
-      <div class="ubar">
-        <span>👋 <strong id="du"></strong><span class="dbadge" id="dl"></span></span>
-        <button class="lout" id="llo">Logout</button>
-      </div>
-      <h1 class="hero">You're<br><span>never</span><br>alone.</h1>
-      <p class="sub">Talk to a real stranger. No login. No judgment.</p>
-      <button class="cta" id="scb"><span>Start Chatting</span><span>→</span></button>
-      <button class="sec-btn" id="histbtn"><span>💬 Chat History</span><span>→</span></button>
-      <button class="sec-btn" id="onlinebtn"><span>👥 Online Users</span><span>→</span></button>
-    </div>
-    <div class="ad-panel"><div class="ad-inner">
-      <div class="ad-tag">Sponsored</div>
-      <div class="ad-brand">Your Brand Here</div>
-      <div class="ad-line">Reach thousands of real people daily</div>
-      <div class="ad-contact">📧 ads@notalone.chat</div>
-    </div></div>
-  </div>
-
-  <!-- MATCHING -->
-  <div id="matching" class="screen">
-    <div class="mc">
-      <div class="pr"></div>
-      <div class="pc">👤</div>
-      <p class="mt" id="mtt">Finding someone...</p>
-      <p class="ms">Connecting you with a real stranger</p>
-    </div>
-  </div>
-
-  <!-- CHAT -->
-  <div id="chat" class="screen">
-    <div class="ch">
-      <div class="hl">
-        <div class="av">👤</div>
-        <div><div class="sn">Anonymous Stranger</div><div class="ss" id="cs">● Connected</div></div>
-      </div>
-      <div class="hb">
-        <button class="nb" id="ncb">New</button>
-        <button class="eb" id="ecb">End</button>
-      </div>
-    </div>
-    <div class="adb" id="adbar">
-      <div class="adbi">
-        <span class="adts">Ad</span>
-        <span class="adbt"><strong>Your Brand Here</strong> — Reach thousands</span>
-        <span class="ade">ads@notalone.chat</span>
-      </div>
-      <button class="adc" id="acb">×</button>
-    </div>
-    <div class="msgs" id="msgs"></div>
-    <div class="ir">
-      <input id="mi" placeholder="Type a message..." maxlength="500"/>
-      <button class="sb" id="sndb">➤</button>
-    </div>
-  </div>
-
-  <!-- HISTORY -->
-  <div id="history" class="screen">
-    <div class="phead">
-      <div class="phead-title">💬 Chat History</div>
-      <button class="phead-back" id="hback">← Back</button>
-    </div>
-    <div class="plist" id="hlist"></div>
-  </div>
-
-  <!-- ONLINE -->
-  <div id="online-screen" class="screen">
-    <div class="phead">
-      <div class="phead-title">👥 Online Users</div>
-      <button class="phead-back" id="oback">← Back</button>
-    </div>
-    <div class="plist" id="olist"></div>
-  </div>
-
-  <!-- ADMIN -->
-  <div id="admin" class="screen">
-    <div class="aw">
-      <button class="ab" id="alo">← Logout</button>
-      <div class="at">🛡️ Admin Panel</div>
-      <div id="aul"><div class="ae">Loading...</div></div>
-    </div>
-  </div>
-
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script>
-  firebase.initializeApp({
-    apiKey:"AIzaSyDWORZEMwgOOXOt2QteyKAl8teSoYYteEM",
-    authDomain:"notalone-chat.firebaseapp.com",
-    databaseURL:"https://notalone-chat-default-rtdb.firebaseio.com",
-    projectId:"notalone-chat",
-    storageBucket:"notalone-chat.firebasestorage.app",
-    messagingSenderId:"935305184354",
-    appId:"1:935305184354:web:a4f5f95d1654d8131d3d3b"
-  });
-
-  const db = firebase.database();
-  const AU = "admin", AP = "notalone2024admin", WA = "94765273733";
-  const sid = "s_" + Math.random().toString(36).substr(2,9);
-
-  let cu = null, rid = null;
-  let curChat = [], curStranger = null;
-  let msgOff = null, roomOff = null, waitOff = null;
-  let seenMsgKeys = new Set();
-
-  // Dots
-  let dots = 1;
-  setInterval(()=>{ dots=(dots%3)+1; const e=document.getElementById("mtt"); if(e) e.textContent="Finding someone"+".".repeat(dots); }, 500);
-
-  // Online count
-  db.ref("online").on("value", s=>{ const e=document.getElementById("oc"); if(e) e.textContent=(s.numChildren()||0).toLocaleString(); });
-
-  function SS(n){ document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active')); document.getElementById(n).classList.add('active'); }
-  function SE(id,m){ const e=document.getElementById(id); e.textContent=m; e.style.display="block"; }
-  function HE(id){ document.getElementById(id).style.display="none"; }
-
-  // Auto login
-  window.addEventListener("load", async()=>{
-    const u = localStorage.getItem("na_u");
-    const p = localStorage.getItem("na_p");
-    if(!u||!p){ SS("login"); return; }
-    if(u===AU && p===AP){ cu={username:AU,isAdmin:true}; SS("admin"); loadAdmin(); return; }
-    try{
-      const snap = await db.ref("users/"+u).get();
-      if(!snap.exists()){ clrSess(); SS("login"); return; }
-      const data = snap.val();
-      if(data.password !== p){ clrSess(); SS("login"); return; }
-      cu = {username:u, ...data};
-      goHome();
-    }catch(e){ SS("login"); }
-  });
-
-  function clrSess(){ localStorage.removeItem("na_u"); localStorage.removeItem("na_p"); }
-
-  document.getElementById("tor").onclick = ()=>SS("register");
-  document.getElementById("tol").onclick = ()=>SS("login");
-  document.getElementById("plo").onclick = doLogout;
-  document.getElementById("llo").onclick = doLogout;
-  document.getElementById("alo").onclick = doLogout;
-  document.getElementById("scb").onclick = startMatch;
-  document.getElementById("ncb").onclick = startMatch;
-  document.getElementById("ecb").onclick = ()=>{ saveChat(); cleanupChat(); SS("landing"); };
-  document.getElementById("acb").onclick = ()=>{ document.getElementById("adbar").style.display="none"; };
-  document.getElementById("sndb").onclick = sendMsg;
-  document.getElementById("mi").onkeydown = e=>{ if(e.key==="Enter") sendMsg(); };
-  document.getElementById("histbtn").onclick = showHistory;
-  document.getElementById("hback").onclick = ()=>SS("landing");
-  document.getElementById("onlinebtn").onclick = showOnline;
-  document.getElementById("oback").onclick = ()=>SS("landing");
-
-  // LOGIN
-  document.getElementById("lb").onclick = async function(){
-    const u = document.getElementById("lu").value.trim().toLowerCase();
-    const p = document.getElementById("lp").value;
-    HE("le");
-    if(!u||!p){ SE("le","Please fill all fields."); return; }
-    if(u===AU && p===AP){
-      cu={username:AU,isAdmin:true};
-      localStorage.setItem("na_u",AU); localStorage.setItem("na_p",AP);
-      SS("admin"); loadAdmin(); return;
-    }
-    try{
-      const snap = await db.ref("users/"+u).get();
-      if(!snap.exists()){ SE("le","Username not found."); return; }
-      const data = snap.val();
-      const enc = btoa(p);
-      if(data.password!==enc){ SE("le","Wrong password."); return; }
-      cu={username:u,...data};
-      localStorage.setItem("na_u",u); localStorage.setItem("na_p",enc);
-      goHome();
-    }catch(e){ SE("le","Error. Try again."); }
-  };
-
-  // REGISTER
-  document.getElementById("rb").onclick = async function(){
-    const u = document.getElementById("ru").value.trim().toLowerCase();
-    const p = document.getElementById("rp").value;
-    const p2 = document.getElementById("rp2").value;
-    HE("re");
-    if(!u||!p||!p2){ SE("re","Please fill all fields."); return; }
-    if(u.length<3){ SE("re","Username: min 3 characters."); return; }
-    if(p.length<4){ SE("re","Password: min 4 characters."); return; }
-    if(p!==p2){ SE("re","Passwords don't match."); return; }
-    if(u===AU){ SE("re","Username not available."); return; }
-    if(!/^[a-z0-9_]+$/.test(u)){ SE("re","Only lowercase letters, numbers, underscore."); return; }
-    try{
-      const snap = await db.ref("users/"+u).get();
-      if(snap.exists()){ SE("re","Username already taken."); return; }
-      const enc = btoa(p);
-      await db.ref("users/"+u).set({password:enc,createdAt:Date.now(),active:false,expiresAt:0});
-      cu={username:u,active:false,expiresAt:0};
-      localStorage.setItem("na_u",u); localStorage.setItem("na_p",enc);
-      goHome();
-    }catch(e){ SE("re","Error. Try again."); }
-  };
-
-  function goHome(){
-    const now = Date.now();
-    if(cu.active && cu.expiresAt>now){
-      const days = Math.ceil((cu.expiresAt-now)/(1000*60*60*24));
-      document.getElementById("du").textContent = cu.username;
-      document.getElementById("dl").textContent = days+" days left";
-      db.ref("online/"+sid).set({username:cu.username, ts:Date.now()});
-      db.ref("online/"+sid).onDisconnect().remove();
-      SS("landing");
-    } else {
-      const msg = encodeURIComponent("Hello! I want to activate my NotAlone account.\n\nUsername: "+cu.username+"\n\nPlease send payment details 🙏");
-      document.getElementById("wab").href = "https://wa.me/"+WA+"?text="+msg;
-      SS("payment");
-    }
-  }
-
-  function doLogout(){
-    saveChat(); cleanupChat();
-    db.ref("online/"+sid).remove();
-    clrSess(); cu=null; SS("login");
-  }
-
-  // ADD MESSAGE TO UI
-  function addMsg(from, text){
-    const msgs = document.getElementById("msgs");
-    const div = document.createElement("div");
-    const safeText = String(text).replace(/</g,"&lt;").replace(/>/g,"&gt;");
-    if(from==="system"){
-      div.className="sm";
-      div.innerHTML='<span class="st">'+safeText+'</span>';
-    } else if(from==="me"){
-      div.className="mw";
-      div.innerHTML='<div class="mb">'+safeText+'</div>';
-    } else {
-      div.className="tw";
-      div.innerHTML='<div class="tb">'+safeText+'</div>';
-    }
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  // SEND MESSAGE
-  function sendMsg(){
-    const input = document.getElementById("mi");
-    const text = input.value.trim();
-    if(!text || !rid) return;
-    input.value = "";
-    const key = db.ref("messages/"+rid).push();
-    key.set({sid:sid, text:text, ts:firebase.database.ServerValue.TIMESTAMP});
-  }
-
-  // START MATCHING
-  async function startMatch(){
-    saveChat(); cleanupChat();
-    document.getElementById("msgs").innerHTML = "";
-    curChat = []; seenMsgKeys = new Set();
-    curStranger = "Stranger_"+Math.random().toString(36).substr(2,6).toUpperCase();
-    SS("matching");
-
-    const snap = await db.ref("waiting").get();
-    let matched = false;
-
-    if(snap.exists()){
-      const keys = Object.keys(snap.val()).filter(k=>k!==sid);
-      if(keys.length>0){
-        const pid = keys[0];
-        const newRid = [sid,pid].sort().join("__");
-        await db.ref("waiting/"+pid).remove();
-        rid = newRid;
-        await db.ref("rooms/"+rid).set({sid1:sid, sid2:pid, ts:Date.now()});
-        matched = true;
-        beginChat();
-        return;
-      }
-    }
-
-    if(!matched){
-      await db.ref("waiting/"+sid).set({ts:Date.now()});
-      db.ref("waiting/"+sid).onDisconnect().remove();
-      waitOff = db.ref("rooms").on("value", snap=>{
-        if(!snap.exists()||rid) return;
-        snap.forEach(child=>{
-          const r = child.val();
-          if(r && (r.sid1===sid || r.sid2===sid)){
-            rid = child.key;
-            if(waitOff){ db.ref("rooms").off("value",waitOff); waitOff=null; }
-            db.ref("waiting/"+sid).remove();
-            beginChat();
-          }
-        });
-      });
-    }
-  }
-
-  function beginChat(){
-    SS("chat");
-    document.getElementById("cs").textContent = "● Connected";
-    document.getElementById("cs").style.color = "#4ade80";
-    addMsg("system","You are connected with a stranger. Say hi! 👋");
-
-    // *** KEY FIX: use child_added to get each message as it arrives ***
-    msgOff = db.ref("messages/"+rid).on("child_added", snap=>{
-      const key = snap.key;
-      if(seenMsgKeys.has(key)) return; // prevent duplicates
-      seenMsgKeys.add(key);
-      const m = snap.val();
-      if(!m||!m.text) return;
-      const from = m.sid===sid ? "me" : "stranger";
-      addMsg(from, m.text);
-      curChat.push({from, text:m.text});
-    });
-
-    // Watch for disconnect
-    roomOff = db.ref("rooms/"+rid).on("value", snap=>{
-      if(!snap.exists() && rid){
-        addMsg("system","Stranger has disconnected.");
-        document.getElementById("cs").textContent = "● Disconnected";
-        document.getElementById("cs").style.color = "#ef4444";
-        saveChat();
-        rid = null;
-      }
-    });
-  }
-
-  function cleanupChat(){
-    if(rid){
-      if(msgOff) db.ref("messages/"+rid).off("child_added", msgOff);
-      if(roomOff) db.ref("rooms/"+rid).off("value", roomOff);
-      db.ref("rooms/"+rid).remove();
-      db.ref("messages/"+rid).remove();
-      rid=null; msgOff=null; roomOff=null;
-    }
-    if(waitOff){ db.ref("rooms").off("value",waitOff); waitOff=null; }
-    db.ref("waiting/"+sid).remove();
-    seenMsgKeys = new Set();
-  }
-
-  // SAVE CHAT HISTORY
-  function saveChat(){
-    if(!curChat.length||!curStranger) return;
-    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h.unshift({id:Date.now(), stranger:curStranger, date:new Date().toLocaleDateString(), time:new Date().toLocaleTimeString(), msgs:[...curChat], hidden:false});
-    if(h.length>50) h.pop();
-    localStorage.setItem("na_hist",JSON.stringify(h));
-    curChat=[]; curStranger=null;
-  }
-
-  // SHOW HISTORY
-  function showHistory(){
-    SS("history");
-    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
-    const list = document.getElementById("hlist");
-    if(!h.length){ list.innerHTML='<div class="pempty">No chat history yet.</div>'; return; }
-    let html="";
-    h.forEach((item,i)=>{
-      const prev = item.msgs.length ? item.msgs[item.msgs.length-1].text : "(empty)";
-      const safe = String(prev).replace(/</g,"&lt;").replace(/>/g,"&gt;");
-      html+=`<div class="hi${item.hidden?' hid':''}">
-        <div class="hi-top"><div class="hi-name">👤 ${item.stranger}</div><div class="hi-date">${item.date}</div></div>
-        <div class="hi-prev">${safe}</div>
-        <div class="hi-acts">
-          <button class="hi-btn" onclick="viewChat(${i})">👁 View</button>
-          <button class="hi-btn" onclick="toggleHide(${i})">${item.hidden?'👁 Show':'🙈 Hide'}</button>
-          <button class="hi-btn hi-del" onclick="delChat(${i})">🗑 Delete</button>
+<body class="bg-slate-900 text-white h-screen flex flex-col font-sans">
+    <div id="login-box" class="flex-1 flex items-center justify-center p-6">
+        <div class="bg-slate-800 p-8 rounded-3xl w-full max-w-sm shadow-2xl border border-slate-700">
+            <h1 class="text-3xl font-bold text-center text-blue-400 mb-6 italic">Not Alone</h1>
+            <input type="text" id="username" placeholder="User Name" class="w-full bg-slate-700 p-4 rounded-xl mb-4 outline-none border border-slate-600 focus:border-blue-500">
+            <input type="password" id="password" placeholder="Password" class="w-full bg-slate-700 p-4 rounded-xl mb-6 outline-none border border-slate-600 focus:border-blue-500">
+            <button onclick="handleLogin()" class="w-full bg-blue-600 py-4 rounded-xl font-bold hover:bg-blue-500">Login / Register</button>
+            <p class="text-[10px] text-gray-500 text-center mt-6 uppercase">Register වුණු පසු WhatsApp එකට Redirect වේවි.</p>
         </div>
-      </div>`;
-    });
-    list.innerHTML=html;
-  }
-
-  function viewChat(i){
-    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
-    const item = h[i]; if(!item) return;
-    cleanupChat();
-    document.getElementById("msgs").innerHTML="";
-    addMsg("system","Chat with "+item.stranger+" — "+item.date+" "+item.time);
-    item.msgs.forEach(m=>addMsg(m.from,m.text));
-    document.getElementById("cs").textContent="● History";
-    document.getElementById("cs").style.color="#ffc107";
-    SS("chat");
-  }
-
-  function toggleHide(i){
-    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h[i].hidden=!h[i].hidden;
-    localStorage.setItem("na_hist",JSON.stringify(h));
-    showHistory();
-  }
-
-  function delChat(i){
-    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h.splice(i,1);
-    localStorage.setItem("na_hist",JSON.stringify(h));
-    showHistory();
-  }
-
-  // ONLINE USERS
-  function showOnline(){
-    SS("online-screen");
-    db.ref("online").on("value", snap=>{
-      const list = document.getElementById("olist");
-      let html="";
-      if(snap.exists()){
-        snap.forEach(child=>{
-          if(child.key===sid) return;
-          const data = child.val();
-          const uname = (data&&data.username) ? data.username : "Anonymous";
-          html+=`<div class="ol-item"><div class="ol-av">👤</div><div><div class="ol-name">${uname}</div><div class="ol-st">● Online now</div></div></div>`;
-        });
-      }
-      list.innerHTML = html||'<div class="pempty">No one else online right now.</div>';
-    });
-  }
-
-  // ADMIN
-  function loadAdmin(){
-    db.ref("users").on("value", snap=>{
-      const list = document.getElementById("aul");
-      if(!snap.exists()){ list.innerHTML='<div class="ae">No users yet.</div>'; return; }
-      const now=Date.now(); let html="";
-      snap.forEach(child=>{
-        const u=child.key, data=child.val();
-        const active=data.active&&data.expiresAt>now;
-        const expired=data.active&&data.expiresAt<=now;
-        const days=active?Math.ceil((data.expiresAt-now)/(1000*60*60*24)):0;
-        const st=active?'<span class="sa">● Active ('+days+' days)</span>':expired?'<span class="se2">● Expired</span>':'<span class="sp">● Pending Payment</span>';
-        html+='<div class="auc"><div class="aun">@'+u+'</div><div class="aus">'+st+'</div><button class="aab" onclick="approve(\''+u+'\')">✅ Approve 30 days</button><button class="arb" onclick="revoke(\''+u+'\')">🚫 Revoke</button></div>';
-      });
-      list.innerHTML=html||'<div class="ae">No users yet.</div>';
-    });
-  }
-
-  function approve(u){ db.ref("users/"+u).update({active:true,expiresAt:Date.now()+(30*24*60*60*1000)}); alert("✅ @"+u+" approved!"); }
-  function revoke(u){ db.ref("users/"+u).update({active:false,expiresAt:0}); alert("🚫 @"+u+" revoked."); }
-</script>
+    </div>
+    <div id="chat-box" class="hidden h-screen flex flex-col">
+        <div class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
+            <h2 class="font-bold text-blue-400 italic">Not Alone</h2>
+            <button onclick="localStorage.clear(); location.reload();" class="text-xs bg-slate-700 px-3 py-1 rounded-full text-red-400">Logout</button>
+        </div>
+        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-2"></div>
+        <div class="p-4 bg-slate-800 flex gap-2">
+            <input type="text" id="msgInput" placeholder="Message..." class="flex-1 bg-slate-700 p-3 rounded-xl outline-none">
+            <button onclick="sendMsg()" class="bg-blue-600 px-6 py-3 rounded-xl font-bold">Send</button>
+        </div>
+    </div>
 </body>
 </html>
