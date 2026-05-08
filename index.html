@@ -85,8 +85,8 @@
     .st{font-size:12px;color:#4a5568;background:rgba(255,255,255,.04);padding:6px 14px;border-radius:20px;display:inline-block}
     .mw{display:flex;justify-content:flex-end;animation:fu .2s ease}
     .tw{display:flex;justify-content:flex-start;animation:fu .2s ease}
-    .mb{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:12px 16px;border-radius:18px 18px 4px 18px;max-width:78%;font-size:15px;line-height:1.5}
-    .tb{background:rgba(255,255,255,.08);color:#e2e8f0;padding:12px 16px;border-radius:18px 18px 18px 4px;max-width:78%;font-size:15px;line-height:1.5;border:1px solid rgba(255,255,255,.06)}
+    .mb{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:12px 16px;border-radius:18px 18px 4px 18px;max-width:78%;font-size:15px;line-height:1.5;word-break:break-word}
+    .tb{background:rgba(255,255,255,.08);color:#e2e8f0;padding:12px 16px;border-radius:18px 18px 18px 4px;max-width:78%;font-size:15px;line-height:1.5;border:1px solid rgba(255,255,255,.06);word-break:break-word}
     .ir{display:flex;gap:10px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.98);position:sticky;bottom:0}
     #mi{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none}
     #mi::placeholder{color:#4a5568}
@@ -203,7 +203,7 @@
   <div id="chat" class="screen">
     <div class="ch">
       <div class="hl"><div class="av">👤</div>
-        <div><div class="sn" id="chat-stranger-name">Anonymous Stranger</div><div class="ss" id="cs">● Connected</div></div>
+        <div><div class="sn">Anonymous Stranger</div><div class="ss" id="cs">● Connected</div></div>
       </div>
       <div class="hb"><button class="nb" id="ncb">New</button><button class="eb" id="ecb">End</button></div>
     </div>
@@ -252,155 +252,337 @@
     messagingSenderId:"935305184354",
     appId:"1:935305184354:web:a4f5f95d1654d8131d3d3b"
   });
-  const db=firebase.database();
-  const AU="admin",AP="notalone2024admin",WA="94765273733";
-  let cu=null,sid="s_"+Math.random().toString(36).substr(2,9);
-  let rid=null,msgRef=null,roomRef=null,waitRef=null;
-  let curChat=[],curStranger=null;
 
-  function ss(n){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(n).classList.add('active');}
-  function se(id,m){const e=document.getElementById(id);e.textContent=m;e.style.display="block";}
-  function he(id){document.getElementById(id).style.display="none";}
+  const db = firebase.database();
+  const AU="admin", AP="notalone2024admin", WA="94765273733";
+
+  // Unique session ID
+  const sid = "s_" + Math.random().toString(36).substr(2,9);
+
+  let cu = null;
+  let rid = null;
+  let curChat = [];
+  let curStranger = null;
+  let msgListener = null;
+  let roomListener = null;
+  let waitListener = null;
+  let lastMsgCount = 0;
 
   // Dots animation
-  let d=1;
-  setInterval(()=>{d=(d%3)+1;const e=document.getElementById("mtt");if(e)e.textContent="Finding someone"+".".repeat(d);},500);
+  let d = 1;
+  setInterval(()=>{
+    d = (d%3)+1;
+    const e = document.getElementById("mtt");
+    if(e) e.textContent = "Finding someone" + ".".repeat(d);
+  }, 500);
 
   // Online count
-  db.ref("online").on("value",snap=>{
-    const e=document.getElementById("oc");
-    if(e)e.textContent=(snap.numChildren()||0).toLocaleString();
+  db.ref("online").on("value", snap=>{
+    const e = document.getElementById("oc");
+    if(e) e.textContent = (snap.numChildren()||0).toLocaleString();
   });
 
-  // Auto-login
-  window.addEventListener("load",async()=>{
-    const u=localStorage.getItem("na_u");
-    const p=localStorage.getItem("na_p");
-    if(!u||!p){ss("login");return;}
-    if(u===AU&&p===AP){cu={username:AU,isAdmin:true};ss("admin");loadAdmin();return;}
+  function showScreen(name){
+    document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+    document.getElementById(name).classList.add('active');
+  }
+
+  function showErr(id, msg){
+    const e = document.getElementById(id);
+    e.textContent = msg;
+    e.style.display = "block";
+  }
+
+  function hideErr(id){
+    document.getElementById(id).style.display = "none";
+  }
+
+  // Auto login on page load
+  window.addEventListener("load", async()=>{
+    const u = localStorage.getItem("na_u");
+    const p = localStorage.getItem("na_p");
+    if(!u || !p){ showScreen("login"); return; }
+    if(u === AU && p === AP){
+      cu = {username:AU, isAdmin:true};
+      showScreen("admin"); loadAdmin(); return;
+    }
     try{
-      const snap=await db.ref("users/"+u).get();
-      if(!snap.exists()){clearSession();ss("login");return;}
-      const data=snap.val();
-      if(data.password!==p){clearSession();ss("login");return;}
-      cu={username:u,...data};
-      goLanding();
-    }catch(e){ss("login");}
+      const snap = await db.ref("users/"+u).get();
+      if(!snap.exists()){ clearSess(); showScreen("login"); return; }
+      const data = snap.val();
+      if(data.password !== p){ clearSess(); showScreen("login"); return; }
+      cu = {username:u, ...data};
+      goHome();
+    } catch(e){ showScreen("login"); }
   });
 
-  function clearSession(){localStorage.removeItem("na_u");localStorage.removeItem("na_p");}
+  function clearSess(){
+    localStorage.removeItem("na_u");
+    localStorage.removeItem("na_p");
+  }
 
-  // Button bindings
-  document.getElementById("tor").onclick=()=>ss("register");
-  document.getElementById("tol").onclick=()=>ss("login");
-  document.getElementById("plo").onclick=logout;
-  document.getElementById("llo").onclick=logout;
-  document.getElementById("alo").onclick=logout;
-  document.getElementById("scb").onclick=startMatch;
-  document.getElementById("ncb").onclick=startMatch;
-  document.getElementById("ecb").onclick=()=>{saveChat();cleanupChat();ss("landing");};
-  document.getElementById("acb").onclick=()=>document.getElementById("adbar").style.display="none";
-  document.getElementById("sndb").onclick=send;
-  document.getElementById("mi").onkeydown=e=>{if(e.key==="Enter")send();};
-  document.getElementById("histbtn").onclick=showHistory;
-  document.getElementById("hback").onclick=()=>ss("landing");
-  document.getElementById("onlinebtn").onclick=showOnline;
-  document.getElementById("oback").onclick=()=>ss("landing");
+  // Navigation
+  document.getElementById("tor").onclick = ()=>showScreen("register");
+  document.getElementById("tol").onclick = ()=>showScreen("login");
+  document.getElementById("plo").onclick = doLogout;
+  document.getElementById("llo").onclick = doLogout;
+  document.getElementById("alo").onclick = doLogout;
+  document.getElementById("scb").onclick = startMatch;
+  document.getElementById("ncb").onclick = startMatch;
+  document.getElementById("ecb").onclick = ()=>{ saveChat(); cleanupChat(); showScreen("landing"); };
+  document.getElementById("acb").onclick = ()=>{ document.getElementById("adbar").style.display="none"; };
+  document.getElementById("sndb").onclick = sendMsg;
+  document.getElementById("mi").onkeydown = e=>{ if(e.key==="Enter") sendMsg(); };
+  document.getElementById("histbtn").onclick = showHistory;
+  document.getElementById("hback").onclick = ()=>showScreen("landing");
+  document.getElementById("onlinebtn").onclick = showOnlineUsers;
+  document.getElementById("oback").onclick = ()=>showScreen("landing");
 
   // LOGIN
-  document.getElementById("lb").onclick=async function(){
-    const u=document.getElementById("lu").value.trim().toLowerCase();
-    const p=document.getElementById("lp").value;
-    he("le");
-    if(!u||!p){se("le","Please fill all fields.");return;}
-    if(u===AU&&p===AP){
-      cu={username:AU,isAdmin:true};
-      localStorage.setItem("na_u",AU);localStorage.setItem("na_p",AP);
-      ss("admin");loadAdmin();return;
+  document.getElementById("lb").onclick = async function(){
+    const u = document.getElementById("lu").value.trim().toLowerCase();
+    const p = document.getElementById("lp").value;
+    hideErr("le");
+    if(!u||!p){ showErr("le","Please fill all fields."); return; }
+    if(u===AU && p===AP){
+      cu = {username:AU, isAdmin:true};
+      localStorage.setItem("na_u", AU);
+      localStorage.setItem("na_p", AP);
+      showScreen("admin"); loadAdmin(); return;
     }
-    const snap=await db.ref("users/"+u).get();
-    if(!snap.exists()){se("le","Username not found.");return;}
-    const data=snap.val();
-    const encoded=btoa(p);
-    if(data.password!==encoded){se("le","Wrong password.");return;}
-    cu={username:u,...data};
-    localStorage.setItem("na_u",u);localStorage.setItem("na_p",encoded);
-    goLanding();
+    try{
+      const snap = await db.ref("users/"+u).get();
+      if(!snap.exists()){ showErr("le","Username not found."); return; }
+      const data = snap.val();
+      const enc = btoa(p);
+      if(data.password !== enc){ showErr("le","Wrong password."); return; }
+      cu = {username:u, ...data};
+      localStorage.setItem("na_u", u);
+      localStorage.setItem("na_p", enc);
+      goHome();
+    } catch(e){ showErr("le","Login failed. Try again."); }
   };
 
   // REGISTER
-  document.getElementById("rb").onclick=async function(){
-    const u=document.getElementById("ru").value.trim().toLowerCase();
-    const p=document.getElementById("rp").value;
-    const p2=document.getElementById("rp2").value;
-    he("re");
-    if(!u||!p||!p2){se("re","Please fill all fields.");return;}
-    if(u.length<3){se("re","Username must be at least 3 characters.");return;}
-    if(p.length<4){se("re","Password must be at least 4 characters.");return;}
-    if(p!==p2){se("re","Passwords don't match.");return;}
-    if(u===AU){se("re","Username not available.");return;}
-    if(!/^[a-z0-9_]+$/.test(u)){se("re","Only lowercase letters, numbers, underscore.");return;}
-    const snap=await db.ref("users/"+u).get();
-    if(snap.exists()){se("re","Username already taken.");return;}
-    const encoded=btoa(p);
-    await db.ref("users/"+u).set({password:encoded,createdAt:Date.now(),active:false,expiresAt:0});
-    cu={username:u,active:false,expiresAt:0};
-    localStorage.setItem("na_u",u);localStorage.setItem("na_p",encoded);
-    goLanding();
+  document.getElementById("rb").onclick = async function(){
+    const u = document.getElementById("ru").value.trim().toLowerCase();
+    const p = document.getElementById("rp").value;
+    const p2 = document.getElementById("rp2").value;
+    hideErr("re");
+    if(!u||!p||!p2){ showErr("re","Please fill all fields."); return; }
+    if(u.length<3){ showErr("re","Username: min 3 characters."); return; }
+    if(p.length<4){ showErr("re","Password: min 4 characters."); return; }
+    if(p!==p2){ showErr("re","Passwords don't match."); return; }
+    if(u===AU){ showErr("re","Username not available."); return; }
+    if(!/^[a-z0-9_]+$/.test(u)){ showErr("re","Only lowercase letters, numbers, underscore."); return; }
+    try{
+      const snap = await db.ref("users/"+u).get();
+      if(snap.exists()){ showErr("re","Username already taken."); return; }
+      const enc = btoa(p);
+      await db.ref("users/"+u).set({password:enc, createdAt:Date.now(), active:false, expiresAt:0});
+      cu = {username:u, active:false, expiresAt:0};
+      localStorage.setItem("na_u", u);
+      localStorage.setItem("na_p", enc);
+      goHome();
+    } catch(e){ showErr("re","Registration failed. Try again."); }
   };
 
-  function goLanding(){
-    const now=Date.now();
-    if(cu.active&&cu.expiresAt>now){
-      const days=Math.ceil((cu.expiresAt-now)/(1000*60*60*24));
-      document.getElementById("du").textContent=cu.username;
-      document.getElementById("dl").textContent=days+" days left";
+  function goHome(){
+    const now = Date.now();
+    if(cu.active && cu.expiresAt > now){
+      const days = Math.ceil((cu.expiresAt - now)/(1000*60*60*24));
+      document.getElementById("du").textContent = cu.username;
+      document.getElementById("dl").textContent = days + " days left";
       // Set online with username
-      db.ref("online/"+sid).set({username:cu.username,ts:Date.now()});
+      db.ref("online/"+sid).set({username: cu.username, ts: Date.now()});
       db.ref("online/"+sid).onDisconnect().remove();
-      ss("landing");
+      showScreen("landing");
     } else {
-      const msg=encodeURIComponent("Hello! I want to activate my NotAlone account.\n\nUsername: "+cu.username+"\n\nPlease send payment details 🙏");
-      document.getElementById("wab").href="https://wa.me/"+WA+"?text="+msg;
-      ss("payment");
+      const msg = encodeURIComponent("Hello! I want to activate my NotAlone account.\n\nUsername: "+cu.username+"\n\nPlease send payment details 🙏");
+      document.getElementById("wab").href = "https://wa.me/"+WA+"?text="+msg;
+      showScreen("payment");
     }
   }
 
-  function logout(){
-    saveChat();cleanupChat();
+  function doLogout(){
+    saveChat(); cleanupChat();
     db.ref("online/"+sid).remove();
-    clearSession();cu=null;ss("login");
+    clearSess(); cu = null;
+    showScreen("login");
   }
 
-  // SAVE CHAT HISTORY
-  function saveChat(){
-    if(!curChat.length||!curStranger)return;
-    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h.unshift({
-      id:Date.now(),
-      stranger:curStranger,
-      date:new Date().toLocaleDateString(),
-      time:new Date().toLocaleTimeString(),
-      msgs:[...curChat],
-      hidden:false
+  // ===== CHAT =====
+  function addMsg(from, text){
+    const msgs = document.getElementById("msgs");
+    const div = document.createElement("div");
+    if(from==="system"){
+      div.className = "sm";
+      div.innerHTML = '<span class="st">'+text+'</span>';
+    } else if(from==="me"){
+      div.className = "mw";
+      div.innerHTML = '<div class="mb">'+text+'</div>';
+    } else {
+      div.className = "tw";
+      div.innerHTML = '<div class="tb">'+text+'</div>';
+    }
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function sendMsg(){
+    const input = document.getElementById("mi");
+    const text = input.value.trim();
+    if(!text || !rid) return;
+    input.value = "";
+    db.ref("messages/"+rid).push({
+      sid: sid,
+      text: text,
+      ts: Date.now()
     });
-    if(h.length>50)h.pop();
-    localStorage.setItem("na_hist",JSON.stringify(h));
-    curChat=[];curStranger=null;
   }
 
-  // SHOW HISTORY
+  async function startMatch(){
+    saveChat(); cleanupChat();
+    document.getElementById("msgs").innerHTML = "";
+    curChat = [];
+    curStranger = "Stranger_" + Math.random().toString(36).substr(2,6).toUpperCase();
+    lastMsgCount = 0;
+    showScreen("matching");
+
+    // Check waiting queue
+    const snap = await db.ref("waiting").get();
+    let matched = false;
+
+    if(snap.exists()){
+      const waiters = Object.keys(snap.val()).filter(id=>id!==sid);
+      if(waiters.length > 0){
+        const partnerId = waiters[0];
+        const newRid = [sid, partnerId].sort().join("_");
+        await db.ref("waiting/"+partnerId).remove();
+        rid = newRid;
+        await db.ref("rooms/"+rid).set({
+          u1: sid, u2: partnerId, ts: Date.now()
+        });
+        matched = true;
+        startChatUI();
+        return;
+      }
+    }
+
+    // Wait for match
+    if(!matched){
+      await db.ref("waiting/"+sid).set({ts: Date.now()});
+      db.ref("waiting/"+sid).onDisconnect().remove();
+
+      waitListener = db.ref("rooms").on("value", snap=>{
+        if(!snap.exists()) return;
+        snap.forEach(child=>{
+          const room = child.val();
+          if((room.u1===sid || room.u2===sid) && !rid){
+            rid = child.key;
+            if(waitListener){ db.ref("rooms").off("value", waitListener); waitListener=null; }
+            db.ref("waiting/"+sid).remove();
+            startChatUI();
+          }
+        });
+      });
+    }
+  }
+
+  function startChatUI(){
+    showScreen("chat");
+    document.getElementById("cs").textContent = "● Connected";
+    document.getElementById("cs").style.color = "#4ade80";
+    addMsg("system", "You are connected with a stranger. Say hi! 👋");
+
+    // Listen for messages using "value" - most reliable
+    msgListener = db.ref("messages/"+rid).on("value", snap=>{
+      const msgs = document.getElementById("msgs");
+      const scrolledToBottom = msgs.scrollHeight - msgs.clientHeight <= msgs.scrollTop + 50;
+
+      if(!snap.exists()) return;
+
+      // Get all messages and count
+      const allMsgs = [];
+      snap.forEach(child=>{
+        allMsgs.push({key: child.key, ...child.val()});
+      });
+      allMsgs.sort((a,b)=>a.ts - b.ts);
+
+      // Only render new messages
+      if(allMsgs.length > lastMsgCount){
+        const newMsgs = allMsgs.slice(lastMsgCount);
+        newMsgs.forEach(m=>{
+          const from = m.sid === sid ? "me" : "stranger";
+          addMsg(from, m.text);
+          curChat.push({from, text: m.text});
+        });
+        lastMsgCount = allMsgs.length;
+      }
+
+      if(scrolledToBottom) msgs.scrollTop = msgs.scrollHeight;
+    });
+
+    // Listen for room deletion (stranger disconnect)
+    roomListener = db.ref("rooms/"+rid).on("value", snap=>{
+      if(!snap.exists() && rid){
+        addMsg("system", "Stranger has disconnected.");
+        document.getElementById("cs").textContent = "● Disconnected";
+        document.getElementById("cs").style.color = "#ef4444";
+        saveChat();
+        rid = null;
+      }
+    });
+  }
+
+  function cleanupChat(){
+    if(rid){
+      db.ref("rooms/"+rid).remove();
+      db.ref("messages/"+rid).remove();
+      if(msgListener){ db.ref("messages/"+rid).off("value", msgListener); msgListener=null; }
+      if(roomListener){ db.ref("rooms/"+rid).off("value", roomListener); roomListener=null; }
+      rid = null;
+    }
+    if(waitListener){ db.ref("rooms").off("value", waitListener); waitListener=null; }
+    db.ref("waiting/"+sid).remove();
+    lastMsgCount = 0;
+  }
+
+  // ===== CHAT HISTORY =====
+  function saveChat(){
+    if(!curChat.length || !curStranger) return;
+    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
+    h.unshift({
+      id: Date.now(),
+      stranger: curStranger,
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      msgs: [...curChat],
+      hidden: false
+    });
+    if(h.length > 50) h.pop();
+    localStorage.setItem("na_hist", JSON.stringify(h));
+    curChat = []; curStranger = null;
+  }
+
   function showHistory(){
-    ss("history");
-    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
-    const list=document.getElementById("hlist");
-    if(!h.length){list.innerHTML='<div class="pempty">No chat history yet.<br>Start chatting to see your history here!</div>';return;}
-    let html="";
-    h.forEach((item,i)=>{
-      const prev=item.msgs.length?item.msgs[item.msgs.length-1].text:"(empty)";
-      html+=`<div class="hi${item.hidden?' hid':''}">
-        <div class="hi-top"><div class="hi-name">👤 ${item.stranger}</div><div class="hi-date">${item.date} ${item.time}</div></div>
-        <div class="hi-prev">${prev}</div>
+    showScreen("history");
+    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
+    const list = document.getElementById("hlist");
+    if(!h.length){
+      list.innerHTML = '<div class="pempty">No chat history yet.<br>Start chatting!</div>';
+      return;
+    }
+    let html = "";
+    h.forEach((item, i)=>{
+      const prev = item.msgs.length ? item.msgs[item.msgs.length-1].text : "(empty)";
+      const safePreview = prev.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      html += `<div class="hi${item.hidden?' hid':''}">
+        <div class="hi-top">
+          <div class="hi-name">👤 ${item.stranger}</div>
+          <div class="hi-date">${item.date}</div>
+        </div>
+        <div class="hi-prev">${safePreview}</div>
         <div class="hi-acts">
           <button class="hi-btn" onclick="viewChat(${i})">👁 View</button>
           <button class="hi-btn" onclick="toggleHide(${i})">${item.hidden?'👁 Show':'🙈 Hide'}</button>
@@ -408,175 +590,90 @@
         </div>
       </div>`;
     });
-    list.innerHTML=html;
+    list.innerHTML = html;
   }
 
   function viewChat(i){
-    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
-    const item=h[i];if(!item)return;
-    document.getElementById("msgs").innerHTML="";
-    document.getElementById("chat-stranger-name").textContent=item.stranger;
-    addMsg("system","Viewing chat with "+item.stranger+" on "+item.date);
-    item.msgs.forEach(m=>addMsg(m.from,m.text));
-    document.getElementById("cs").textContent="● History View";
-    document.getElementById("cs").style.color="#ffc107";
-    rid=null;ss("chat");
+    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
+    const item = h[i]; if(!item) return;
+    cleanupChat();
+    document.getElementById("msgs").innerHTML = "";
+    addMsg("system", "Chat with "+item.stranger+" — "+item.date+" "+item.time);
+    item.msgs.forEach(m=>addMsg(m.from, m.text));
+    document.getElementById("cs").textContent = "● History";
+    document.getElementById("cs").style.color = "#ffc107";
+    showScreen("chat");
   }
 
   function toggleHide(i){
-    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h[i].hidden=!h[i].hidden;
-    localStorage.setItem("na_hist",JSON.stringify(h));
+    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
+    h[i].hidden = !h[i].hidden;
+    localStorage.setItem("na_hist", JSON.stringify(h));
     showHistory();
   }
 
   function delChat(i){
-    if(!confirm("Delete this chat?"))return;
-    const h=JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h.splice(i,1);
-    localStorage.setItem("na_hist",JSON.stringify(h));
+    const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
+    h.splice(i, 1);
+    localStorage.setItem("na_hist", JSON.stringify(h));
     showHistory();
   }
 
-  // ONLINE USERS
-  function showOnline(){
-    ss("online-screen");
-    db.ref("online").on("value",snap=>{
-      const list=document.getElementById("olist");
-      let html="";
+  // ===== ONLINE USERS =====
+  function showOnlineUsers(){
+    showScreen("online-screen");
+    db.ref("online").on("value", snap=>{
+      const list = document.getElementById("olist");
+      let html = "";
       if(snap.exists()){
         snap.forEach(child=>{
-          if(child.key===sid)return;
-          const data=child.val();
-          const uname=data.username||"Anonymous";
-          html+=`<div class="ol-item">
+          if(child.key === sid) return; // skip self
+          const data = child.val();
+          const uname = (data && data.username) ? data.username : "Anonymous";
+          html += `<div class="ol-item">
             <div class="ol-av">👤</div>
-            <div><div class="ol-name">${uname}</div><div class="ol-st">● Online now</div></div>
+            <div>
+              <div class="ol-name">${uname}</div>
+              <div class="ol-st">● Online now</div>
+            </div>
           </div>`;
         });
       }
-      list.innerHTML=html||'<div class="pempty">No one else online right now.</div>';
+      list.innerHTML = html || '<div class="pempty">No one else online right now.</div>';
     });
   }
 
-  // ADMIN
+  // ===== ADMIN =====
   function loadAdmin(){
-    db.ref("users").on("value",snap=>{
-      const list=document.getElementById("aul");
-      if(!snap.exists()){list.innerHTML='<div class="ae">No users yet.</div>';return;}
-      const now=Date.now();let html="";
+    db.ref("users").on("value", snap=>{
+      const list = document.getElementById("aul");
+      if(!snap.exists()){ list.innerHTML='<div class="ae">No users yet.</div>'; return; }
+      const now = Date.now(); let html = "";
       snap.forEach(child=>{
-        const u=child.key,data=child.val();
-        const active=data.active&&data.expiresAt>now;
-        const expired=data.active&&data.expiresAt<=now;
-        const days=active?Math.ceil((data.expiresAt-now)/(1000*60*60*24)):0;
-        const st=active
-          ?'<span class="sa">● Active ('+days+' days)</span>'
-          :expired?'<span class="se2">● Expired</span>'
-          :'<span class="sp">● Pending Payment</span>';
-        html+='<div class="auc"><div class="aun">@'+u+'</div><div class="aus">'+st+'</div>'
+        const u = child.key, data = child.val();
+        const active = data.active && data.expiresAt > now;
+        const expired = data.active && data.expiresAt <= now;
+        const days = active ? Math.ceil((data.expiresAt-now)/(1000*60*60*24)) : 0;
+        const st = active
+          ? '<span class="sa">● Active ('+days+' days)</span>'
+          : expired ? '<span class="se2">● Expired</span>'
+          : '<span class="sp">● Pending Payment</span>';
+        html += '<div class="auc"><div class="aun">@'+u+'</div><div class="aus">'+st+'</div>'
           +'<button class="aab" onclick="approve(\''+u+'\')">✅ Approve 30 days</button>'
           +'<button class="arb" onclick="revoke(\''+u+'\')">🚫 Revoke</button></div>';
       });
-      list.innerHTML=html||'<div class="ae">No users yet.</div>';
+      list.innerHTML = html || '<div class="ae">No users yet.</div>';
     });
   }
 
-  function approve(u){db.ref("users/"+u).update({active:true,expiresAt:Date.now()+(30*24*60*60*1000)});alert("✅ @"+u+" approved for 30 days!");}
-  function revoke(u){db.ref("users/"+u).update({active:false,expiresAt:0});alert("🚫 @"+u+" revoked.");}
-
-  // MATCHING
-  async function startMatch(){
-    saveChat();cleanupChat();
-    document.getElementById("msgs").innerHTML="";
-    curChat=[];
-    curStranger="Stranger_"+Math.random().toString(36).substr(2,6).toUpperCase();
-    document.getElementById("chat-stranger-name").textContent="Anonymous Stranger";
-    ss("matching");
-
-    const snap=await db.ref("waiting").get();
-    let matched=false;
-
-    if(snap.exists()){
-      const ws=Object.keys(snap.val()).filter(id=>id!==sid);
-      if(ws.length>0){
-        const pid=ws[0];
-        const nrid=[sid,pid].sort().join("_");
-        await db.ref("waiting/"+pid).remove();
-        rid=nrid;
-        await db.ref("rooms/"+rid).set({users:{[sid]:true,[pid]:true}});
-        matched=true;enterChat();return;
-      }
-    }
-
-    if(!matched){
-      await db.ref("waiting/"+sid).set({ts:Date.now()});
-      db.ref("waiting/"+sid).onDisconnect().remove();
-      waitRef=db.ref("rooms").on("value",snap=>{
-        if(!snap.exists())return;
-        const entries=snap.val();
-        const found=Object.entries(entries).find(([,r])=>r.users&&r.users[sid]);
-        if(found){
-          rid=found[0];
-          if(waitRef){db.ref("rooms").off("value",waitRef);waitRef=null;}
-          enterChat();
-        }
-      });
-    }
+  function approve(u){
+    db.ref("users/"+u).update({active:true, expiresAt:Date.now()+(30*24*60*60*1000)});
+    alert("✅ @"+u+" approved for 30 days!");
   }
 
-  function enterChat(){
-    ss("chat");
-    document.getElementById("cs").textContent="● Connected";
-    document.getElementById("cs").style.color="#4ade80";
-    addMsg("system","You are connected with a stranger. Say hi! 👋");
-
-    // Listen for new messages
-    msgRef=db.ref("messages/"+rid).on("child_added",snap=>{
-      const m=snap.val();
-      const from=m.sid===sid?"me":"stranger";
-      addMsg(from,m.text);
-      curChat.push({from,text:m.text});
-    });
-
-    // Listen for disconnect
-    roomRef=db.ref("rooms/"+rid).on("value",snap=>{
-      if(!snap.exists()){
-        addMsg("system","Stranger has disconnected.");
-        document.getElementById("cs").textContent="● Disconnected";
-        document.getElementById("cs").style.color="#ef4444";
-        saveChat();rid=null;
-      }
-    });
-  }
-
-  function addMsg(from,text){
-    const msgs=document.getElementById("msgs");
-    const div=document.createElement("div");
-    if(from==="system"){div.className="sm";div.innerHTML='<span class="st">'+text+'</span>';}
-    else if(from==="me"){div.className="mw";div.innerHTML='<div class="mb">'+text+'</div>';}
-    else{div.className="tw";div.innerHTML='<div class="tb">'+text+'</div>';}
-    msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
-  }
-
-  function send(){
-    const input=document.getElementById("mi");
-    const text=input.value.trim();
-    if(!text||!rid)return;
-    input.value="";
-    db.ref("messages/"+rid).push({sid,text,timestamp:Date.now()});
-  }
-
-  function cleanupChat(){
-    if(rid){
-      db.ref("rooms/"+rid).remove();
-      db.ref("messages/"+rid).remove();
-      if(msgRef)db.ref("messages/"+rid).off("child_added",msgRef);
-      if(roomRef)db.ref("rooms/"+rid).off("value",roomRef);
-      rid=null;msgRef=null;roomRef=null;
-    }
-    db.ref("waiting/"+sid).remove();
-    if(waitRef){db.ref("rooms").off("value",waitRef);waitRef=null;}
+  function revoke(u){
+    db.ref("users/"+u).update({active:false, expiresAt:0});
+    alert("🚫 @"+u+" revoked.");
   }
 </script>
 </body>
