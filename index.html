@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NotAlone — You're Never Alone</title>
   <link rel="manifest" href="/manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'DM Sans',sans-serif;background:#0a0a12;color:#fff;min-height:100vh;overflow-x:hidden}
@@ -18,6 +18,7 @@
     .orb1{width:220px;height:220px;background:#7c3aed;top:-60px;right:-60px;animation:float1 6s ease-in-out infinite}
     .orb2{width:160px;height:160px;background:#2563eb;bottom:200px;left:-40px;animation:float2 8s ease-in-out infinite}
     .orb3{width:100px;height:100px;background:#e94560;top:42%;right:20px;animation:float3 5s ease-in-out infinite}
+    /* AUTH */
     .wrap{position:relative;z-index:2;padding:60px 28px 40px;flex:1;display:flex;flex-direction:column;justify-content:center}
     .logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;margin-bottom:8px}
     .logo span{color:#e94560}
@@ -31,6 +32,7 @@
     .link-row{text-align:center;font-size:14px;color:#64748b}
     .link-row a{color:#7c3aed;cursor:pointer}
     .err{background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:#e94560;margin-bottom:16px;display:none}
+    /* PAYMENT */
     .pay-wrap{position:relative;z-index:2;padding:60px 28px 40px;flex:1;display:flex;flex-direction:column}
     .pay-card{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(124,58,237,.3);border-radius:20px;padding:28px;margin-bottom:20px}
     .pay-icon{font-size:48px;margin-bottom:16px;text-align:center}
@@ -42,6 +44,7 @@
     .pay-note{font-size:12px;color:#64748b;text-align:center;line-height:1.6}
     .pay-hours{background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:#ffc107;text-align:center;margin-top:12px}
     .pay-logout{background:none;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px;color:#64748b;font-size:13px;cursor:pointer;width:100%;margin-top:16px}
+    /* LANDING */
     .land-content{position:relative;z-index:2;padding:60px 28px 32px;flex:1}
     .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:6px 14px;font-size:12px;color:#a0aec0;margin-bottom:20px}
     .gdot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80;display:inline-block}
@@ -59,12 +62,14 @@
     .ad-brand{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px}
     .ad-line{font-size:13px;color:#94a3b8;margin-bottom:8px}
     .ad-contact{font-size:12px;color:#e94560}
+    /* MATCHING */
     #matching{align-items:center;justify-content:center}
     .mc{position:relative;z-index:2;text-align:center}
     .pr{width:100px;height:100px;border-radius:50%;background:rgba(124,58,237,.3);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 1.5s ease-out infinite}
     .pc{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#e94560);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 24px;position:relative}
     .mt{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px;min-width:220px}
     .ms{font-size:14px;color:#64748b}
+    /* CHAT */
     #chat{background:#0a0a12}
     .ch{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
     .hl{display:flex;align-items:center;gap:12px}
@@ -80,7 +85,7 @@
     .adbt{font-size:12px;color:#94a3b8}
     .ade{font-size:11px;color:#7c3aed}
     .adc{background:none;border:none;color:#4a5568;font-size:18px;cursor:pointer;padding:0 4px}
-    .msgs{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:10px}
+    .msgs{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:10px;min-height:200px}
     .sm{text-align:center}
     .st{font-size:12px;color:#4a5568;background:rgba(255,255,255,.04);padding:6px 14px;border-radius:20px;display:inline-block}
     .mw{display:flex;justify-content:flex-end;animation:fu .2s ease}
@@ -91,6 +96,7 @@
     #mi{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none}
     #mi::placeholder{color:#4a5568}
     .sb{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#e94560);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0}
+    /* HISTORY & ONLINE */
     #history,#online-screen{background:#0a0a12}
     .phead{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(12,12,20,.97);position:sticky;top:0;z-index:10}
     .phead-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
@@ -110,6 +116,7 @@
     .ol-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#e94560);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
     .ol-name{font-weight:700;font-size:14px}
     .ol-st{font-size:11px;color:#4ade80}
+    /* ADMIN */
     .aw{position:relative;z-index:2;padding:40px 20px;flex:1;overflow-y:auto}
     .at{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px}
     .auc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;margin-bottom:12px}
@@ -132,6 +139,7 @@
 <div class="orbs"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
 <div id="app">
 
+  <!-- LOGIN -->
   <div id="login" class="screen active">
     <div class="wrap">
       <div class="logo">Not<span>Alone</span></div>
@@ -145,13 +153,14 @@
     </div>
   </div>
 
+  <!-- REGISTER -->
   <div id="register" class="screen">
     <div class="wrap">
       <div class="logo">Not<span>Alone</span></div>
       <div class="logo-sub">You're never alone.</div>
       <div class="title">Create Account 🚀</div>
       <div class="err" id="re"></div>
-      <div class="field"><label>Username</label><input id="ru" type="text" placeholder="lowercase letters, numbers, _" autocomplete="off"/></div>
+      <div class="field"><label>Username</label><input id="ru" type="text" placeholder="lowercase, numbers, _" autocomplete="off"/></div>
       <div class="field"><label>Password</label><input id="rp" type="password" placeholder="Min 4 characters"/></div>
       <div class="field"><label>Confirm Password</label><input id="rp2" type="password" placeholder="Repeat password"/></div>
       <button class="btn" id="rb">Create Account →</button>
@@ -159,6 +168,7 @@
     </div>
   </div>
 
+  <!-- PAYMENT -->
   <div id="payment" class="screen">
     <div class="pay-wrap">
       <div class="pay-card">
@@ -175,10 +185,14 @@
     </div>
   </div>
 
+  <!-- LANDING -->
   <div id="landing" class="screen">
     <div class="land-content">
       <div class="badge"><span class="gdot"></span><span id="oc">0</span> people online now</div>
-      <div class="ubar"><span>👋 <strong id="du"></strong><span class="dbadge" id="dl"></span></span><button class="lout" id="llo">Logout</button></div>
+      <div class="ubar">
+        <span>👋 <strong id="du"></strong><span class="dbadge" id="dl"></span></span>
+        <button class="lout" id="llo">Logout</button>
+      </div>
       <h1 class="hero">You're<br><span>never</span><br>alone.</h1>
       <p class="sub">Talk to a real stranger. No login. No judgment.</p>
       <button class="cta" id="scb"><span>Start Chatting</span><span>→</span></button>
@@ -193,28 +207,44 @@
     </div></div>
   </div>
 
+  <!-- MATCHING -->
   <div id="matching" class="screen">
-    <div class="mc"><div class="pr"></div><div class="pc">👤</div>
+    <div class="mc">
+      <div class="pr"></div>
+      <div class="pc">👤</div>
       <p class="mt" id="mtt">Finding someone...</p>
       <p class="ms">Connecting you with a real stranger</p>
     </div>
   </div>
 
+  <!-- CHAT -->
   <div id="chat" class="screen">
     <div class="ch">
-      <div class="hl"><div class="av">👤</div>
+      <div class="hl">
+        <div class="av">👤</div>
         <div><div class="sn">Anonymous Stranger</div><div class="ss" id="cs">● Connected</div></div>
       </div>
-      <div class="hb"><button class="nb" id="ncb">New</button><button class="eb" id="ecb">End</button></div>
+      <div class="hb">
+        <button class="nb" id="ncb">New</button>
+        <button class="eb" id="ecb">End</button>
+      </div>
     </div>
     <div class="adb" id="adbar">
-      <div class="adbi"><span class="adts">Ad</span><span class="adbt"><strong>Your Brand Here</strong> — Reach thousands</span><span class="ade">ads@notalone.chat</span></div>
+      <div class="adbi">
+        <span class="adts">Ad</span>
+        <span class="adbt"><strong>Your Brand Here</strong> — Reach thousands</span>
+        <span class="ade">ads@notalone.chat</span>
+      </div>
       <button class="adc" id="acb">×</button>
     </div>
     <div class="msgs" id="msgs"></div>
-    <div class="ir"><input id="mi" placeholder="Type a message..." maxlength="500"/><button class="sb" id="sndb">➤</button></div>
+    <div class="ir">
+      <input id="mi" placeholder="Type a message..." maxlength="500"/>
+      <button class="sb" id="sndb">➤</button>
+    </div>
   </div>
 
+  <!-- HISTORY -->
   <div id="history" class="screen">
     <div class="phead">
       <div class="phead-title">💬 Chat History</div>
@@ -223,6 +253,7 @@
     <div class="plist" id="hlist"></div>
   </div>
 
+  <!-- ONLINE -->
   <div id="online-screen" class="screen">
     <div class="phead">
       <div class="phead-title">👥 Online Users</div>
@@ -231,8 +262,10 @@
     <div class="plist" id="olist"></div>
   </div>
 
+  <!-- ADMIN -->
   <div id="admin" class="screen">
-    <div class="aw"><button class="ab" id="alo">← Logout</button>
+    <div class="aw">
+      <button class="ab" id="alo">← Logout</button>
       <div class="at">🛡️ Admin Panel</div>
       <div id="aul"><div class="ae">Loading...</div></div>
     </div>
@@ -254,113 +287,80 @@
   });
 
   const db = firebase.database();
-  const AU="admin", AP="notalone2024admin", WA="94765273733";
-
-  // Unique session ID
+  const AU = "admin", AP = "notalone2024admin", WA = "94765273733";
   const sid = "s_" + Math.random().toString(36).substr(2,9);
 
-  let cu = null;
-  let rid = null;
-  let curChat = [];
-  let curStranger = null;
-  let msgListener = null;
-  let roomListener = null;
-  let waitListener = null;
-  let lastMsgCount = 0;
+  let cu = null, rid = null;
+  let curChat = [], curStranger = null;
+  let msgOff = null, roomOff = null, waitOff = null;
+  let seenMsgKeys = new Set();
 
-  // Dots animation
-  let d = 1;
-  setInterval(()=>{
-    d = (d%3)+1;
-    const e = document.getElementById("mtt");
-    if(e) e.textContent = "Finding someone" + ".".repeat(d);
-  }, 500);
+  // Dots
+  let dots = 1;
+  setInterval(()=>{ dots=(dots%3)+1; const e=document.getElementById("mtt"); if(e) e.textContent="Finding someone"+".".repeat(dots); }, 500);
 
   // Online count
-  db.ref("online").on("value", snap=>{
-    const e = document.getElementById("oc");
-    if(e) e.textContent = (snap.numChildren()||0).toLocaleString();
-  });
+  db.ref("online").on("value", s=>{ const e=document.getElementById("oc"); if(e) e.textContent=(s.numChildren()||0).toLocaleString(); });
 
-  function showScreen(name){
-    document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
-    document.getElementById(name).classList.add('active');
-  }
+  function SS(n){ document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active')); document.getElementById(n).classList.add('active'); }
+  function SE(id,m){ const e=document.getElementById(id); e.textContent=m; e.style.display="block"; }
+  function HE(id){ document.getElementById(id).style.display="none"; }
 
-  function showErr(id, msg){
-    const e = document.getElementById(id);
-    e.textContent = msg;
-    e.style.display = "block";
-  }
-
-  function hideErr(id){
-    document.getElementById(id).style.display = "none";
-  }
-
-  // Auto login on page load
+  // Auto login
   window.addEventListener("load", async()=>{
     const u = localStorage.getItem("na_u");
     const p = localStorage.getItem("na_p");
-    if(!u || !p){ showScreen("login"); return; }
-    if(u === AU && p === AP){
-      cu = {username:AU, isAdmin:true};
-      showScreen("admin"); loadAdmin(); return;
-    }
+    if(!u||!p){ SS("login"); return; }
+    if(u===AU && p===AP){ cu={username:AU,isAdmin:true}; SS("admin"); loadAdmin(); return; }
     try{
       const snap = await db.ref("users/"+u).get();
-      if(!snap.exists()){ clearSess(); showScreen("login"); return; }
+      if(!snap.exists()){ clrSess(); SS("login"); return; }
       const data = snap.val();
-      if(data.password !== p){ clearSess(); showScreen("login"); return; }
+      if(data.password !== p){ clrSess(); SS("login"); return; }
       cu = {username:u, ...data};
       goHome();
-    } catch(e){ showScreen("login"); }
+    }catch(e){ SS("login"); }
   });
 
-  function clearSess(){
-    localStorage.removeItem("na_u");
-    localStorage.removeItem("na_p");
-  }
+  function clrSess(){ localStorage.removeItem("na_u"); localStorage.removeItem("na_p"); }
 
-  // Navigation
-  document.getElementById("tor").onclick = ()=>showScreen("register");
-  document.getElementById("tol").onclick = ()=>showScreen("login");
+  document.getElementById("tor").onclick = ()=>SS("register");
+  document.getElementById("tol").onclick = ()=>SS("login");
   document.getElementById("plo").onclick = doLogout;
   document.getElementById("llo").onclick = doLogout;
   document.getElementById("alo").onclick = doLogout;
   document.getElementById("scb").onclick = startMatch;
   document.getElementById("ncb").onclick = startMatch;
-  document.getElementById("ecb").onclick = ()=>{ saveChat(); cleanupChat(); showScreen("landing"); };
+  document.getElementById("ecb").onclick = ()=>{ saveChat(); cleanupChat(); SS("landing"); };
   document.getElementById("acb").onclick = ()=>{ document.getElementById("adbar").style.display="none"; };
   document.getElementById("sndb").onclick = sendMsg;
   document.getElementById("mi").onkeydown = e=>{ if(e.key==="Enter") sendMsg(); };
   document.getElementById("histbtn").onclick = showHistory;
-  document.getElementById("hback").onclick = ()=>showScreen("landing");
-  document.getElementById("onlinebtn").onclick = showOnlineUsers;
-  document.getElementById("oback").onclick = ()=>showScreen("landing");
+  document.getElementById("hback").onclick = ()=>SS("landing");
+  document.getElementById("onlinebtn").onclick = showOnline;
+  document.getElementById("oback").onclick = ()=>SS("landing");
 
   // LOGIN
   document.getElementById("lb").onclick = async function(){
     const u = document.getElementById("lu").value.trim().toLowerCase();
     const p = document.getElementById("lp").value;
-    hideErr("le");
-    if(!u||!p){ showErr("le","Please fill all fields."); return; }
+    HE("le");
+    if(!u||!p){ SE("le","Please fill all fields."); return; }
     if(u===AU && p===AP){
-      cu = {username:AU, isAdmin:true};
-      localStorage.setItem("na_u", AU);
-      localStorage.setItem("na_p", AP);
-      showScreen("admin"); loadAdmin(); return;
+      cu={username:AU,isAdmin:true};
+      localStorage.setItem("na_u",AU); localStorage.setItem("na_p",AP);
+      SS("admin"); loadAdmin(); return;
     }
     try{
       const snap = await db.ref("users/"+u).get();
-      if(!snap.exists()){ showErr("le","Username not found."); return; }
+      if(!snap.exists()){ SE("le","Username not found."); return; }
       const data = snap.val();
       const enc = btoa(p);
-      if(data.password !== enc){ showErr("le","Wrong password."); return; }
-      cu = {username:u, ...data};
-      localStorage.setItem("na_u", u);
-      localStorage.setItem("na_p", enc);
+      if(data.password!==enc){ SE("le","Wrong password."); return; }
+      cu={username:u,...data};
+      localStorage.setItem("na_u",u); localStorage.setItem("na_p",enc);
       goHome();
-    } catch(e){ showErr("le","Login failed. Try again."); }
+    }catch(e){ SE("le","Error. Try again."); }
   };
 
   // REGISTER
@@ -368,165 +368,140 @@
     const u = document.getElementById("ru").value.trim().toLowerCase();
     const p = document.getElementById("rp").value;
     const p2 = document.getElementById("rp2").value;
-    hideErr("re");
-    if(!u||!p||!p2){ showErr("re","Please fill all fields."); return; }
-    if(u.length<3){ showErr("re","Username: min 3 characters."); return; }
-    if(p.length<4){ showErr("re","Password: min 4 characters."); return; }
-    if(p!==p2){ showErr("re","Passwords don't match."); return; }
-    if(u===AU){ showErr("re","Username not available."); return; }
-    if(!/^[a-z0-9_]+$/.test(u)){ showErr("re","Only lowercase letters, numbers, underscore."); return; }
+    HE("re");
+    if(!u||!p||!p2){ SE("re","Please fill all fields."); return; }
+    if(u.length<3){ SE("re","Username: min 3 characters."); return; }
+    if(p.length<4){ SE("re","Password: min 4 characters."); return; }
+    if(p!==p2){ SE("re","Passwords don't match."); return; }
+    if(u===AU){ SE("re","Username not available."); return; }
+    if(!/^[a-z0-9_]+$/.test(u)){ SE("re","Only lowercase letters, numbers, underscore."); return; }
     try{
       const snap = await db.ref("users/"+u).get();
-      if(snap.exists()){ showErr("re","Username already taken."); return; }
+      if(snap.exists()){ SE("re","Username already taken."); return; }
       const enc = btoa(p);
-      await db.ref("users/"+u).set({password:enc, createdAt:Date.now(), active:false, expiresAt:0});
-      cu = {username:u, active:false, expiresAt:0};
-      localStorage.setItem("na_u", u);
-      localStorage.setItem("na_p", enc);
+      await db.ref("users/"+u).set({password:enc,createdAt:Date.now(),active:false,expiresAt:0});
+      cu={username:u,active:false,expiresAt:0};
+      localStorage.setItem("na_u",u); localStorage.setItem("na_p",enc);
       goHome();
-    } catch(e){ showErr("re","Registration failed. Try again."); }
+    }catch(e){ SE("re","Error. Try again."); }
   };
 
   function goHome(){
     const now = Date.now();
-    if(cu.active && cu.expiresAt > now){
-      const days = Math.ceil((cu.expiresAt - now)/(1000*60*60*24));
+    if(cu.active && cu.expiresAt>now){
+      const days = Math.ceil((cu.expiresAt-now)/(1000*60*60*24));
       document.getElementById("du").textContent = cu.username;
-      document.getElementById("dl").textContent = days + " days left";
-      // Set online with username
-      db.ref("online/"+sid).set({username: cu.username, ts: Date.now()});
+      document.getElementById("dl").textContent = days+" days left";
+      db.ref("online/"+sid).set({username:cu.username, ts:Date.now()});
       db.ref("online/"+sid).onDisconnect().remove();
-      showScreen("landing");
+      SS("landing");
     } else {
       const msg = encodeURIComponent("Hello! I want to activate my NotAlone account.\n\nUsername: "+cu.username+"\n\nPlease send payment details 🙏");
       document.getElementById("wab").href = "https://wa.me/"+WA+"?text="+msg;
-      showScreen("payment");
+      SS("payment");
     }
   }
 
   function doLogout(){
     saveChat(); cleanupChat();
     db.ref("online/"+sid).remove();
-    clearSess(); cu = null;
-    showScreen("login");
+    clrSess(); cu=null; SS("login");
   }
 
-  // ===== CHAT =====
+  // ADD MESSAGE TO UI
   function addMsg(from, text){
     const msgs = document.getElementById("msgs");
     const div = document.createElement("div");
+    const safeText = String(text).replace(/</g,"&lt;").replace(/>/g,"&gt;");
     if(from==="system"){
-      div.className = "sm";
-      div.innerHTML = '<span class="st">'+text+'</span>';
+      div.className="sm";
+      div.innerHTML='<span class="st">'+safeText+'</span>';
     } else if(from==="me"){
-      div.className = "mw";
-      div.innerHTML = '<div class="mb">'+text+'</div>';
+      div.className="mw";
+      div.innerHTML='<div class="mb">'+safeText+'</div>';
     } else {
-      div.className = "tw";
-      div.innerHTML = '<div class="tb">'+text+'</div>';
+      div.className="tw";
+      div.innerHTML='<div class="tb">'+safeText+'</div>';
     }
     msgs.appendChild(div);
     msgs.scrollTop = msgs.scrollHeight;
   }
 
+  // SEND MESSAGE
   function sendMsg(){
     const input = document.getElementById("mi");
     const text = input.value.trim();
     if(!text || !rid) return;
     input.value = "";
-    db.ref("messages/"+rid).push({
-      sid: sid,
-      text: text,
-      ts: Date.now()
-    });
+    const key = db.ref("messages/"+rid).push();
+    key.set({sid:sid, text:text, ts:firebase.database.ServerValue.TIMESTAMP});
   }
 
+  // START MATCHING
   async function startMatch(){
     saveChat(); cleanupChat();
     document.getElementById("msgs").innerHTML = "";
-    curChat = [];
-    curStranger = "Stranger_" + Math.random().toString(36).substr(2,6).toUpperCase();
-    lastMsgCount = 0;
-    showScreen("matching");
+    curChat = []; seenMsgKeys = new Set();
+    curStranger = "Stranger_"+Math.random().toString(36).substr(2,6).toUpperCase();
+    SS("matching");
 
-    // Check waiting queue
     const snap = await db.ref("waiting").get();
     let matched = false;
 
     if(snap.exists()){
-      const waiters = Object.keys(snap.val()).filter(id=>id!==sid);
-      if(waiters.length > 0){
-        const partnerId = waiters[0];
-        const newRid = [sid, partnerId].sort().join("_");
-        await db.ref("waiting/"+partnerId).remove();
+      const keys = Object.keys(snap.val()).filter(k=>k!==sid);
+      if(keys.length>0){
+        const pid = keys[0];
+        const newRid = [sid,pid].sort().join("__");
+        await db.ref("waiting/"+pid).remove();
         rid = newRid;
-        await db.ref("rooms/"+rid).set({
-          u1: sid, u2: partnerId, ts: Date.now()
-        });
+        await db.ref("rooms/"+rid).set({sid1:sid, sid2:pid, ts:Date.now()});
         matched = true;
-        startChatUI();
+        beginChat();
         return;
       }
     }
 
-    // Wait for match
     if(!matched){
-      await db.ref("waiting/"+sid).set({ts: Date.now()});
+      await db.ref("waiting/"+sid).set({ts:Date.now()});
       db.ref("waiting/"+sid).onDisconnect().remove();
-
-      waitListener = db.ref("rooms").on("value", snap=>{
-        if(!snap.exists()) return;
+      waitOff = db.ref("rooms").on("value", snap=>{
+        if(!snap.exists()||rid) return;
         snap.forEach(child=>{
-          const room = child.val();
-          if((room.u1===sid || room.u2===sid) && !rid){
+          const r = child.val();
+          if(r && (r.sid1===sid || r.sid2===sid)){
             rid = child.key;
-            if(waitListener){ db.ref("rooms").off("value", waitListener); waitListener=null; }
+            if(waitOff){ db.ref("rooms").off("value",waitOff); waitOff=null; }
             db.ref("waiting/"+sid).remove();
-            startChatUI();
+            beginChat();
           }
         });
       });
     }
   }
 
-  function startChatUI(){
-    showScreen("chat");
+  function beginChat(){
+    SS("chat");
     document.getElementById("cs").textContent = "● Connected";
     document.getElementById("cs").style.color = "#4ade80";
-    addMsg("system", "You are connected with a stranger. Say hi! 👋");
+    addMsg("system","You are connected with a stranger. Say hi! 👋");
 
-    // Listen for messages using "value" - most reliable
-    msgListener = db.ref("messages/"+rid).on("value", snap=>{
-      const msgs = document.getElementById("msgs");
-      const scrolledToBottom = msgs.scrollHeight - msgs.clientHeight <= msgs.scrollTop + 50;
-
-      if(!snap.exists()) return;
-
-      // Get all messages and count
-      const allMsgs = [];
-      snap.forEach(child=>{
-        allMsgs.push({key: child.key, ...child.val()});
-      });
-      allMsgs.sort((a,b)=>a.ts - b.ts);
-
-      // Only render new messages
-      if(allMsgs.length > lastMsgCount){
-        const newMsgs = allMsgs.slice(lastMsgCount);
-        newMsgs.forEach(m=>{
-          const from = m.sid === sid ? "me" : "stranger";
-          addMsg(from, m.text);
-          curChat.push({from, text: m.text});
-        });
-        lastMsgCount = allMsgs.length;
-      }
-
-      if(scrolledToBottom) msgs.scrollTop = msgs.scrollHeight;
+    // *** KEY FIX: use child_added to get each message as it arrives ***
+    msgOff = db.ref("messages/"+rid).on("child_added", snap=>{
+      const key = snap.key;
+      if(seenMsgKeys.has(key)) return; // prevent duplicates
+      seenMsgKeys.add(key);
+      const m = snap.val();
+      if(!m||!m.text) return;
+      const from = m.sid===sid ? "me" : "stranger";
+      addMsg(from, m.text);
+      curChat.push({from, text:m.text});
     });
 
-    // Listen for room deletion (stranger disconnect)
-    roomListener = db.ref("rooms/"+rid).on("value", snap=>{
+    // Watch for disconnect
+    roomOff = db.ref("rooms/"+rid).on("value", snap=>{
       if(!snap.exists() && rid){
-        addMsg("system", "Stranger has disconnected.");
+        addMsg("system","Stranger has disconnected.");
         document.getElementById("cs").textContent = "● Disconnected";
         document.getElementById("cs").style.color = "#ef4444";
         saveChat();
@@ -537,52 +512,40 @@
 
   function cleanupChat(){
     if(rid){
+      if(msgOff) db.ref("messages/"+rid).off("child_added", msgOff);
+      if(roomOff) db.ref("rooms/"+rid).off("value", roomOff);
       db.ref("rooms/"+rid).remove();
       db.ref("messages/"+rid).remove();
-      if(msgListener){ db.ref("messages/"+rid).off("value", msgListener); msgListener=null; }
-      if(roomListener){ db.ref("rooms/"+rid).off("value", roomListener); roomListener=null; }
-      rid = null;
+      rid=null; msgOff=null; roomOff=null;
     }
-    if(waitListener){ db.ref("rooms").off("value", waitListener); waitListener=null; }
+    if(waitOff){ db.ref("rooms").off("value",waitOff); waitOff=null; }
     db.ref("waiting/"+sid).remove();
-    lastMsgCount = 0;
+    seenMsgKeys = new Set();
   }
 
-  // ===== CHAT HISTORY =====
+  // SAVE CHAT HISTORY
   function saveChat(){
-    if(!curChat.length || !curStranger) return;
+    if(!curChat.length||!curStranger) return;
     const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h.unshift({
-      id: Date.now(),
-      stranger: curStranger,
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
-      msgs: [...curChat],
-      hidden: false
-    });
-    if(h.length > 50) h.pop();
-    localStorage.setItem("na_hist", JSON.stringify(h));
-    curChat = []; curStranger = null;
+    h.unshift({id:Date.now(), stranger:curStranger, date:new Date().toLocaleDateString(), time:new Date().toLocaleTimeString(), msgs:[...curChat], hidden:false});
+    if(h.length>50) h.pop();
+    localStorage.setItem("na_hist",JSON.stringify(h));
+    curChat=[]; curStranger=null;
   }
 
+  // SHOW HISTORY
   function showHistory(){
-    showScreen("history");
+    SS("history");
     const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
     const list = document.getElementById("hlist");
-    if(!h.length){
-      list.innerHTML = '<div class="pempty">No chat history yet.<br>Start chatting!</div>';
-      return;
-    }
-    let html = "";
-    h.forEach((item, i)=>{
+    if(!h.length){ list.innerHTML='<div class="pempty">No chat history yet.</div>'; return; }
+    let html="";
+    h.forEach((item,i)=>{
       const prev = item.msgs.length ? item.msgs[item.msgs.length-1].text : "(empty)";
-      const safePreview = prev.replace(/</g,"&lt;").replace(/>/g,"&gt;");
-      html += `<div class="hi${item.hidden?' hid':''}">
-        <div class="hi-top">
-          <div class="hi-name">👤 ${item.stranger}</div>
-          <div class="hi-date">${item.date}</div>
-        </div>
-        <div class="hi-prev">${safePreview}</div>
+      const safe = String(prev).replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      html+=`<div class="hi${item.hidden?' hid':''}">
+        <div class="hi-top"><div class="hi-name">👤 ${item.stranger}</div><div class="hi-date">${item.date}</div></div>
+        <div class="hi-prev">${safe}</div>
         <div class="hi-acts">
           <button class="hi-btn" onclick="viewChat(${i})">👁 View</button>
           <button class="hi-btn" onclick="toggleHide(${i})">${item.hidden?'👁 Show':'🙈 Hide'}</button>
@@ -590,91 +553,73 @@
         </div>
       </div>`;
     });
-    list.innerHTML = html;
+    list.innerHTML=html;
   }
 
   function viewChat(i){
     const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
     const item = h[i]; if(!item) return;
     cleanupChat();
-    document.getElementById("msgs").innerHTML = "";
-    addMsg("system", "Chat with "+item.stranger+" — "+item.date+" "+item.time);
-    item.msgs.forEach(m=>addMsg(m.from, m.text));
-    document.getElementById("cs").textContent = "● History";
-    document.getElementById("cs").style.color = "#ffc107";
-    showScreen("chat");
+    document.getElementById("msgs").innerHTML="";
+    addMsg("system","Chat with "+item.stranger+" — "+item.date+" "+item.time);
+    item.msgs.forEach(m=>addMsg(m.from,m.text));
+    document.getElementById("cs").textContent="● History";
+    document.getElementById("cs").style.color="#ffc107";
+    SS("chat");
   }
 
   function toggleHide(i){
     const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h[i].hidden = !h[i].hidden;
-    localStorage.setItem("na_hist", JSON.stringify(h));
+    h[i].hidden=!h[i].hidden;
+    localStorage.setItem("na_hist",JSON.stringify(h));
     showHistory();
   }
 
   function delChat(i){
     const h = JSON.parse(localStorage.getItem("na_hist")||"[]");
-    h.splice(i, 1);
-    localStorage.setItem("na_hist", JSON.stringify(h));
+    h.splice(i,1);
+    localStorage.setItem("na_hist",JSON.stringify(h));
     showHistory();
   }
 
-  // ===== ONLINE USERS =====
-  function showOnlineUsers(){
-    showScreen("online-screen");
+  // ONLINE USERS
+  function showOnline(){
+    SS("online-screen");
     db.ref("online").on("value", snap=>{
       const list = document.getElementById("olist");
-      let html = "";
+      let html="";
       if(snap.exists()){
         snap.forEach(child=>{
-          if(child.key === sid) return; // skip self
+          if(child.key===sid) return;
           const data = child.val();
-          const uname = (data && data.username) ? data.username : "Anonymous";
-          html += `<div class="ol-item">
-            <div class="ol-av">👤</div>
-            <div>
-              <div class="ol-name">${uname}</div>
-              <div class="ol-st">● Online now</div>
-            </div>
-          </div>`;
+          const uname = (data&&data.username) ? data.username : "Anonymous";
+          html+=`<div class="ol-item"><div class="ol-av">👤</div><div><div class="ol-name">${uname}</div><div class="ol-st">● Online now</div></div></div>`;
         });
       }
-      list.innerHTML = html || '<div class="pempty">No one else online right now.</div>';
+      list.innerHTML = html||'<div class="pempty">No one else online right now.</div>';
     });
   }
 
-  // ===== ADMIN =====
+  // ADMIN
   function loadAdmin(){
     db.ref("users").on("value", snap=>{
       const list = document.getElementById("aul");
       if(!snap.exists()){ list.innerHTML='<div class="ae">No users yet.</div>'; return; }
-      const now = Date.now(); let html = "";
+      const now=Date.now(); let html="";
       snap.forEach(child=>{
-        const u = child.key, data = child.val();
-        const active = data.active && data.expiresAt > now;
-        const expired = data.active && data.expiresAt <= now;
-        const days = active ? Math.ceil((data.expiresAt-now)/(1000*60*60*24)) : 0;
-        const st = active
-          ? '<span class="sa">● Active ('+days+' days)</span>'
-          : expired ? '<span class="se2">● Expired</span>'
-          : '<span class="sp">● Pending Payment</span>';
-        html += '<div class="auc"><div class="aun">@'+u+'</div><div class="aus">'+st+'</div>'
-          +'<button class="aab" onclick="approve(\''+u+'\')">✅ Approve 30 days</button>'
-          +'<button class="arb" onclick="revoke(\''+u+'\')">🚫 Revoke</button></div>';
+        const u=child.key, data=child.val();
+        const active=data.active&&data.expiresAt>now;
+        const expired=data.active&&data.expiresAt<=now;
+        const days=active?Math.ceil((data.expiresAt-now)/(1000*60*60*24)):0;
+        const st=active?'<span class="sa">● Active ('+days+' days)</span>':expired?'<span class="se2">● Expired</span>':'<span class="sp">● Pending Payment</span>';
+        html+='<div class="auc"><div class="aun">@'+u+'</div><div class="aus">'+st+'</div><button class="aab" onclick="approve(\''+u+'\')">✅ Approve 30 days</button><button class="arb" onclick="revoke(\''+u+'\')">🚫 Revoke</button></div>';
       });
-      list.innerHTML = html || '<div class="ae">No users yet.</div>';
+      list.innerHTML=html||'<div class="ae">No users yet.</div>';
     });
   }
 
-  function approve(u){
-    db.ref("users/"+u).update({active:true, expiresAt:Date.now()+(30*24*60*60*1000)});
-    alert("✅ @"+u+" approved for 30 days!");
-  }
-
-  function revoke(u){
-    db.ref("users/"+u).update({active:false, expiresAt:0});
-    alert("🚫 @"+u+" revoked.");
-  }
+  function approve(u){ db.ref("users/"+u).update({active:true,expiresAt:Date.now()+(30*24*60*60*1000)}); alert("✅ @"+u+" approved!"); }
+  function revoke(u){ db.ref("users/"+u).update({active:false,expiresAt:0}); alert("🚫 @"+u+" revoked."); }
 </script>
 </body>
 </html>
