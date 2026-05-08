@@ -22,7 +22,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- ස්ථිර ADMIN විස්තර ---
         const ADMIN_USER = "admin"; 
         const ADMIN_PASS = "913132386V"; 
 
@@ -32,7 +31,6 @@
 
             if(!user || !pass) return alert("විස්තර ඇතුළත් කරන්න.");
 
-            // පරණ දත්ත බලන්නේ නැතුව කෙලින්ම Admin ලොග් කිරීම
             if(user === ADMIN_USER && pass === ADMIN_PASS) {
                 localStorage.setItem('isAdmin', 'true');
                 localStorage.removeItem('chatUser');
@@ -45,8 +43,7 @@
 
             if (!snapshot.exists()) {
                 await set(userRef, { password: pass, isPaid: false });
-                const waText = `Hello, I want to join Not Alone Chat.\n\nUsername: ${user}`;
-                window.location.href = `https://wa.me/94773364401?text=${encodeURIComponent(waText)}`;
+                window.location.href = `https://wa.me/94773364401?text=New Register: ${user}`;
                 alert("ඔබේ ගිණුම සෑදුවා! සන්නාම විසින් එය Approve කළ පසු ලොග් විය හැක.");
             } else {
                 const userData = snapshot.val();
@@ -109,7 +106,7 @@
                     const m = c.val();
                     const isMe = m.u === localStorage.getItem('chatUser');
                     b.innerHTML += `<div class="flex ${isMe ? 'justify-end' : 'justify-start'} mb-2">
-                        <div class="${isMe ? 'bg-blue-600' : 'bg-slate-700'} p-3 rounded-2xl max-w-[80%]">
+                        <div class="${isMe ? 'bg-blue-600' : 'bg-slate-700'} p-3 rounded-2xl max-w-[80%] shadow">
                             <p class="text-[10px] font-bold text-blue-300">${m.u}</p>
                             <p class="text-sm">${m.t}</p>
                         </div></div>`;
@@ -134,14 +131,16 @@
 <body class="bg-slate-900 text-white font-sans h-screen flex flex-col overflow-hidden">
 
     <div id="login-screen" class="flex-1 flex items-center justify-center p-6">
-        <div class="bg-slate-800 p-10 rounded-[2.5rem] w-full max-w-sm shadow-2xl border border-slate-700">
-            <h1 class="text-4xl font-extrabold text-center text-blue-400 mb-8 italic">Not Alone</h1>
+        <div class="bg-slate-800 p-10 rounded-[2.5rem] w-full max-sm:max-w-sm shadow-2xl border border-slate-700 text-center">
+            <h1 class="text-4xl font-extrabold text-blue-400 italic">Not Alone</h1>
+            <p class="text-gray-400 text-sm mb-8 mt-1">ඔබට දැන් තනියක් නෑ.</p>
+            
             <div class="space-y-5">
                 <input id="username" placeholder="User Name" class="w-full bg-slate-900 p-5 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 text-sm">
                 <input id="password" type="password" placeholder="Password" class="w-full bg-slate-900 p-5 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 text-sm">
                 <button onclick="handleLogin()" class="w-full bg-blue-600 py-5 rounded-2xl font-bold hover:bg-blue-500 active:scale-95 transition-all text-lg shadow-lg shadow-blue-900/30">Login / Register</button>
             </div>
-            <p class="text-[10px] text-gray-600 text-center mt-8 uppercase TRACKING-WIDE italic">Admin Access Enabled</p>
+            <p class="text-[10px] text-gray-600 mt-8 uppercase TRACKING-WIDE italic">Admin Access Enabled</p>
         </div>
     </div>
 
