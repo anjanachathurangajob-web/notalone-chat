@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Not Alone - Admin Dashboard</title>
+    <title>Not Alone - Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -22,31 +22,20 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        const ADMIN_USER = "admin"; 
+        // --- ADMIN PASSWORD එක ---
         const ADMIN_PASS = "arasubaanjana"; 
 
         window.handleLogin = async () => {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
-
-            if(!user || !pass) return alert("කරුණාකර විස්තර ඇතුළත් කරන්න.");
-
-            if(user === ADMIN_USER && pass === ADMIN_PASS) {
-                localStorage.setItem('isAdmin', 'true');
-                showAdminPanel();
-                return;
-            }
+            if(!user || !pass) return alert("විස්තර පුරවන්න.");
 
             const userRef = ref(db, 'users/' + user);
             const snapshot = await get(userRef);
 
             if (!snapshot.exists()) {
                 await set(userRef, { password: pass, isPaid: false });
-                
-                // WhatsApp පණිවිඩයේ Password එක පෙන්වන්නේ නැත
-                const waText = `Hello, I want to join Not Alone Chat.\n\nUsername: ${user}`;
-                window.location.href = `https://wa.me/94773364401?text=${encodeURIComponent(waText)}`;
-                
+                window.location.href = `https://wa.me/94773364401?text=New%20Register:%20${user}`;
                 alert("ඔබේ ගිණුම සෑදුවා! සන්නාම විසින් එය Approve කළ පසු ලොග් විය හැක.");
             } else {
                 const userData = snapshot.val();
@@ -54,44 +43,42 @@
                     if(userData.isPaid) {
                         localStorage.setItem('chatUser', user);
                         location.reload();
-                    } else { alert("ඔබේ ගිණුම සක්‍රිය නැත. රු. 100 ගෙවා Admin අමතන්න."); }
+                    } else { alert("ඔබේ ගිණුම සක්‍රීය කර ගැනීමට WhatsApp (0773364401) අමතන්න."); }
                 } else { alert("මුරපදය වැරදියි!"); }
             }
+        };
+
+        window.adminLogin = () => {
+            const p = prompt("Admin Password එක ඇතුළත් කරන්න:");
+            if(p === ADMIN_PASS) {
+                localStorage.setItem('isAdmin', 'true');
+                location.reload();
+            } else { alert("වැරදි මුරපදයක්!"); }
         };
 
         function showAdminPanel() {
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('admin-panel').classList.remove('hidden');
-            
-            onValue(ref(db, 'users'), (snapshot) => {
+            onValue(ref(db, 'users'), (s) => {
                 const list = document.getElementById('user-list');
                 list.innerHTML = "";
-                snapshot.forEach(child => {
-                    const name = child.key;
-                    const data = child.val();
-                    if(name !== ADMIN_USER) {
-                        list.innerHTML += `
-                            <div class="flex justify-between items-center p-4 bg-slate-700 mb-3 rounded-xl border border-slate-600 shadow-md">
-                                <div>
-                                    <p class="font-bold text-white text-lg">${name}</p>
-                                    <p class="text-[12px] text-yellow-400 font-mono">Password: ${data.password}</p>
-                                    <p class="text-[11px] text-gray-400">STATUS: ${data.isPaid ? 'Approved' : 'Pending'}</p>
-                                </div>
-                                <button onclick="approveUser('${name}')" class="${data.isPaid ? 'bg-green-600' : 'bg-blue-600'} px-5 py-2 rounded-xl text-xs font-bold transition-all active:scale-95">
-                                    ${data.isPaid ? '✓ සක්‍රියයි' : 'Approve Now'}
-                                </button>
-                            </div>`;
-                    }
+                s.forEach(c => {
+                    const data = c.val();
+                    list.innerHTML += `<div class="p-4 bg-slate-700 mb-2 rounded-xl flex justify-between items-center">
+                        <div><b>${c.key}</b><br><span class="text-xs text-yellow-400">Pass: ${data.password}</span></div>
+                        <button onclick="approve('${c.key}')" class="bg-blue-600 px-4 py-2 rounded-lg text-xs">${data.isPaid ? 'Approved ✓' : 'Approve'}</button>
+                    </div>`;
                 });
             });
         }
 
-        window.approveUser = (name) => {
-            update(ref(db, 'users/' + name), { isPaid: true });
-        };
+        window.approve = (name) => update(ref(db, 'users/' + name), { isPaid: true });
+        window.logout = () => { localStorage.clear(); location.reload(); };
 
-        if(localStorage.getItem('isAdmin')) showAdminPanel();
-        if(localStorage.getItem('chatUser')) showChat();
+        window.onload = () => {
+            if(localStorage.getItem('isAdmin')) return showAdminPanel();
+            if(localStorage.getItem('chatUser')) return showChat();
+        };
 
         function showChat() {
             document.getElementById('login-screen').classList.add('hidden');
@@ -116,46 +103,33 @@
             if(t) push(ref(db, 'chat'), { u: localStorage.getItem('chatUser'), t: t });
             document.getElementById('msg').value = "";
         };
-
     </script>
 </head>
-<body class="bg-slate-900 text-white font-sans h-screen flex flex-col overflow-hidden">
-
-    <div id="login-screen" class="flex-1 flex items-center justify-center p-6">
-        <div class="bg-slate-800 p-10 rounded-[2.5rem] w-full max-w-sm shadow-2xl border border-slate-700">
-            <h1 class="text-4xl font-extrabold text-center text-blue-400 mb-2 italic">Not Alone</h1>
-            <p class="text-center text-gray-500 text-[11px] mb-10 uppercase tracking-widest">Admin & Chat Login</p>
-            <div class="space-y-5">
-                <input id="username" placeholder="User Name" class="w-full bg-slate-900 p-5 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 text-sm">
-                <input id="password" type="password" placeholder="Password" class="w-full bg-slate-900 p-5 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 text-sm">
-                <button onclick="handleLogin()" class="w-full bg-blue-600 py-5 rounded-2xl font-bold hover:bg-blue-500 active:scale-95 transition-all text-lg shadow-lg shadow-blue-900/30">Login / Register</button>
+<body class="bg-slate-900 text-white font-sans h-screen flex flex-col">
+    <div id="login-screen" class="flex-1 flex flex-col items-center justify-center p-6">
+        <div class="bg-slate-800 p-8 rounded-[2rem] w-full max-w-sm shadow-2xl border border-slate-700">
+            <h1 class="text-3xl font-bold text-center text-blue-400 mb-8 italic">Not Alone</h1>
+            <input id="username" placeholder="User Name" class="w-full bg-slate-900 p-4 rounded-xl mb-4 outline-none border border-slate-700">
+            <input id="password" type="password" placeholder="Password" class="w-full bg-slate-900 p-4 rounded-xl mb-6 outline-none border border-slate-700">
+            <button onclick="handleLogin()" class="w-full bg-blue-600 py-4 rounded-xl font-bold hover:bg-blue-500 transition-all">Login / Register</button>
+            <div class="text-center mt-6">
+                <button onclick="adminLogin()" class="text-[10px] text-gray-500 uppercase tracking-widest hover:text-blue-400 underline">Admin Login</button>
             </div>
         </div>
     </div>
 
-    <div id="admin-panel" class="hidden flex-1 flex flex-col p-6 overflow-hidden">
-        <div class="flex justify-between items-center mb-10 pb-4 border-b border-slate-800">
-            <div>
-                <h2 class="text-3xl font-bold text-blue-400">සන්නාම Dashboard</h2>
-                <p class="text-sm text-gray-500">යූසර්ස්ලා පාලනය කරන්න</p>
-            </div>
-            <button onclick="localStorage.clear(); location.reload();" class="bg-red-900/30 px-6 py-2 rounded-full text-red-400 font-bold border border-red-900/50">Logout</button>
+    <div id="admin-panel" class="hidden flex-1 p-6 flex flex-col overflow-hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-blue-400">සන්නාම Dashboard</h2>
+            <button onclick="logout()" class="text-xs bg-red-600 px-3 py-1 rounded">Logout</button>
         </div>
-        <div id="user-list" class="flex-1 overflow-y-auto space-y-1">
-            </div>
+        <div id="user-list" class="flex-1 overflow-y-auto"></div>
     </div>
 
     <div id="chat-screen" class="hidden flex flex-col h-full overflow-hidden">
-        <div class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
-            <h2 class="font-bold text-blue-400 italic text-xl">Not Alone</h2>
-            <button onclick="localStorage.clear(); location.reload();" class="text-xs bg-red-900/30 px-5 py-2 rounded-full text-red-400">Logout</button>
-        </div>
-        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
-        <div class="p-4 bg-slate-900 border-t border-slate-800 flex gap-2">
-            <input id="msg" placeholder="අදහස ලියන්න..." class="flex-1 bg-slate-800 p-4 rounded-2xl outline-none border border-slate-700">
-            <button onclick="send()" class="bg-blue-600 px-8 py-4 rounded-2xl font-bold">Send</button>
-        </div>
+        <div class="p-4 bg-slate-800 flex justify-between"><b>Not Alone</b><button onclick="logout()" class="text-xs text-red-400">Logout</button></div>
+        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-2"></div>
+        <div class="p-4 bg-slate-900 flex gap-2"><input id="msg" class="flex-1 bg-slate-800 p-4 rounded-xl outline-none"><button onclick="send()" class="bg-blue-600 px-6 py-3 rounded-xl font-bold">Send</button></div>
     </div>
-
 </body>
 </html>
