@@ -22,8 +22,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        const ADMIN_USER = "admin"; 
-        const ADMIN_PASS = "913132386V"; 
+        // ස්ථිර Admin තොරතුරු
+        const ADMIN_USER = "admin";
+        const ADMIN_PASS = "913132386V";
 
         window.handleLogin = async () => {
             const user = document.getElementById('username').value.trim();
@@ -31,6 +32,7 @@
 
             if(!user || !pass) return alert("විස්තර ඇතුළත් කරන්න.");
 
+            // Admin Login එක පරීක්ෂා කිරීම - DATABASE එකේ තියෙන එක බලන්නේ නැතුව කෙලින්ම යනවා
             if(user === ADMIN_USER && pass === ADMIN_PASS) {
                 localStorage.setItem('isAdmin', 'true');
                 localStorage.removeItem('chatUser');
@@ -43,7 +45,8 @@
 
             if (!snapshot.exists()) {
                 await set(userRef, { password: pass, isPaid: false });
-                window.location.href = `https://wa.me/94773364401?text=New Register: ${user}`;
+                const waText = `Hello, I want to join Not Alone Chat.\n\nUsername: ${user}`;
+                window.location.href = `https://wa.me/94773364401?text=${encodeURIComponent(waText)}`;
                 alert("ඔබේ ගිණුම සෑදුවා! සන්නාම විසින් එය Approve කළ පසු ලොග් විය හැක.");
             } else {
                 const userData = snapshot.val();
@@ -72,13 +75,13 @@
                     const data = child.val();
                     if(name !== ADMIN_USER) {
                         list.innerHTML += `
-                            <div class="flex justify-between items-center p-4 bg-slate-700 mb-3 rounded-xl border border-slate-600 shadow-md">
+                            <div class="flex justify-between items-center p-4 bg-slate-700 mb-3 rounded-xl border border-slate-600">
                                 <div>
                                     <p class="font-bold text-white text-lg">${name}</p>
                                     <p class="text-[12px] text-yellow-400 font-mono italic">Pass: ${data.password}</p>
                                     <p class="text-[11px] text-gray-400">Status: ${data.isPaid ? 'Approved ✓' : 'Pending'}</p>
                                 </div>
-                                <button onclick="approveUser('${name}')" class="${data.isPaid ? 'bg-green-600' : 'bg-blue-600'} px-5 py-2 rounded-xl text-xs font-bold transition-all active:scale-95">
+                                <button onclick="approveUser('${name}')" class="${data.isPaid ? 'bg-green-600' : 'bg-blue-600'} px-5 py-2 rounded-xl text-xs font-bold active:scale-95">
                                     ${data.isPaid ? 'Done' : 'Approve'}
                                 </button>
                             </div>`;
@@ -131,14 +134,14 @@
 <body class="bg-slate-900 text-white font-sans h-screen flex flex-col overflow-hidden">
 
     <div id="login-screen" class="flex-1 flex items-center justify-center p-6">
-        <div class="bg-slate-800 p-10 rounded-[2.5rem] w-full max-sm:max-w-sm shadow-2xl border border-slate-700 text-center">
+        <div class="bg-slate-800 p-10 rounded-[2.5rem] w-full max-w-sm shadow-2xl border border-slate-700 text-center">
             <h1 class="text-4xl font-extrabold text-blue-400 italic">Not Alone</h1>
             <p class="text-gray-400 text-sm mb-8 mt-1">ඔබට දැන් තනියක් නෑ.</p>
             
             <div class="space-y-5">
-                <input id="username" placeholder="User Name" class="w-full bg-slate-900 p-5 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 text-sm">
-                <input id="password" type="password" placeholder="Password" class="w-full bg-slate-900 p-5 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 text-sm">
-                <button onclick="handleLogin()" class="w-full bg-blue-600 py-5 rounded-2xl font-bold hover:bg-blue-500 active:scale-95 transition-all text-lg shadow-lg shadow-blue-900/30">Login / Register</button>
+                <input id="username" placeholder="User Name" class="w-full bg-slate-900 p-5 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 text-sm text-white">
+                <input id="password" type="password" placeholder="Password" class="w-full bg-slate-900 p-5 rounded-2xl outline-none border border-slate-700 focus:border-blue-500 text-sm text-white">
+                <button onclick="handleLogin()" class="w-full bg-blue-600 py-5 rounded-2xl font-bold hover:bg-blue-500 active:scale-95 transition-all text-lg shadow-lg">Login / Register</button>
             </div>
             <p class="text-[10px] text-gray-600 mt-8 uppercase TRACKING-WIDE italic">Admin Access Enabled</p>
         </div>
@@ -153,8 +156,8 @@
     </div>
 
     <div id="chat-screen" class="hidden flex flex-col h-full overflow-hidden">
-        <div class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
-            <h2 class="font-bold text-blue-400 italic text-xl">Not Alone Chat</h2>
+        <div class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center shadow-lg">
+            <h2 class="font-bold text-blue-400 italic text-xl">Not Alone</h2>
             <button onclick="logout()" class="text-xs bg-red-900/30 px-5 py-2 rounded-full text-red-400">Logout</button>
         </div>
         <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
