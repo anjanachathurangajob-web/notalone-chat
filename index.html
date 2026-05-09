@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Not Alone - Random Chat</title>
+    <title>Not Alone - Omegle Style</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -24,6 +24,9 @@
         let currentChatId = null;
         let myUser = localStorage.getItem('chatUser');
 
+        // --- AUTH & LOGOUT ---
+        window.logout = () => { localStorage.clear(); location.reload(); };
+
         window.handleLogin = async () => {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
@@ -36,12 +39,16 @@
             if (snapshot.exists() && snapshot.val().password === pass && snapshot.val().isPaid) {
                 localStorage.setItem('chatUser', user);
                 location.reload();
-            } else { alert("ගිණුම සක්‍රීය නැත හෝ විස්තර වැරදියි."); }
+            } else { alert("Login failed. Check status or details."); }
         };
 
-        window.findRandomChat = async () => {
+        // --- MATCHING ENGINE ---
+        window.findChat = async () => {
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('loading-screen').classList.remove('hidden');
+            
+            // Cleanup old states
+            if(myUser) await update(ref(db, `users/${myUser}`), { currentChat: null });
 
             const queueRef = ref(db, 'queue');
             const snapshot = await get(queueRef);
@@ -54,57 +61,51 @@
                     await update(ref(db, `users/${peerId}`), { currentChat: chatId });
                     await update(ref(db, `users/${myUser}`), { currentChat: chatId });
                     await remove(ref(db, `queue/${peerId}`));
-                    startChat(chatId);
-                    return;
+                    return; // StartChat triggered by listener
                 }
             }
             await set(ref(db, `queue/${myUser}`), true);
             onDisconnect(ref(db, `queue/${myUser}`)).remove();
-            onValue(ref(db, `users/${myUser}/currentChat`), (s) => {
-                if(s.exists() && s.val()) startChat(s.val());
-            });
         };
 
+        // --- CHAT SESSION ---
         function startChat(chatId) {
             currentChatId = chatId;
             document.getElementById('loading-screen').classList.add('hidden');
             document.getElementById('chat-screen').classList.remove('hidden');
+            document.getElementById('msg-input').focus();
             
-            onValue(ref(db, `messages/${chatId}`), (s) => {
+            const chatMsgRef = ref(db, `messages/${chatId}`);
+            onValue(chatMsgRef, (s) => {
                 const b = document.getElementById('messages'); b.innerHTML = "";
                 s.forEach(c => {
                     const m = c.val();
                     if(m.u) {
                         const isMe = m.u === myUser;
                         b.innerHTML += `<div class="flex ${isMe ? 'justify-end' : 'justify-start'} mb-2">
-                            <div class="${isMe ? 'bg-blue-600' : 'bg-slate-700'} p-3 rounded-2xl max-w-[80%] shadow">
+                            <div class="${isMe ? 'bg-blue-600' : 'bg-slate-700'} px-4 py-2 rounded-2xl max-w-[85%]">
                                 <p class="text-sm">${m.t}</p>
                             </div></div>`;
                     }
                 });
                 b.scrollTop = b.scrollHeight;
-            });
-
-            onValue(ref(db, `messages/${chatId}/status`), (s) => {
-                if(s.val() === 'ended') {
-                    alert("සම්බන්ධතාවය විසන්ධි විය.");
-                    location.reload();
+                if(s.val()?.status === 'ended') {
+                    document.getElementById('status-text').innerText = "Stranger disconnected.";
+                    document.getElementById('msg-area').classList.add('hidden');
+                    document.getElementById('end-options').classList.remove('hidden');
                 }
             });
         }
 
         window.sendMsg = () => {
             const t = document.getElementById('msg-input').value;
-            if(t && currentChatId) push(ref(db, `messages/${currentChatId}`), { u: myUser, t: t });
-            document.getElementById('msg-input').value = "";
+            if(t && currentChatId) {
+                push(ref(db, `messages/${currentChatId}`), { u: myUser, t: t });
+                document.getElementById('msg-input').value = "";
+            }
         };
 
-        window.logout = () => {
-            localStorage.clear();
-            location.reload();
-        };
-
-        window.endChat = async () => {
+        window.skipChat = async () => {
             if(currentChatId) {
                 await set(ref(db, `messages/${currentChatId}/status`), 'ended');
                 await update(ref(db, `users/${myUser}`), { currentChat: null });
@@ -112,78 +113,60 @@
             location.reload();
         };
 
+        // --- INITIALIZE ---
         window.onload = () => {
-            if(localStorage.getItem('isAdmin')) showAdminPanel();
-            else if(!myUser) document.getElementById('login-screen').classList.remove('hidden');
-            else document.getElementById('start-screen').classList.remove('hidden');
-        };
-
-        function showAdminPanel() {
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('admin-panel').classList.remove('hidden');
-            onValue(ref(db, 'users'), (s) => {
-                const list = document.getElementById('user-list');
-                list.innerHTML = "";
-                s.forEach(c => {
-                    if(c.key !== "admin") {
-                        list.innerHTML += `<div class="p-4 bg-slate-700 mb-2 rounded-xl flex justify-between items-center text-sm">
-                            <span>${c.key}</span>
-                            <button onclick="approveUser('${c.key}')" class="bg-blue-600 px-3 py-1 rounded-lg text-xs">${c.val().isPaid ? 'Approved ✓' : 'Approve'}</button>
-                        </div>`;
-                    }
+            if(!myUser) document.getElementById('login-screen').classList.remove('hidden');
+            else {
+                document.getElementById('start-screen').classList.remove('hidden');
+                onValue(ref(db, `users/${myUser}/currentChat`), (s) => {
+                    if(s.exists() && s.val()) startChat(s.val());
                 });
-            });
-        }
-        window.approveUser = (name) => update(ref(db, 'users/' + name), { isPaid: true });
+            }
+        };
 
     </script>
 </head>
 <body class="bg-slate-900 text-white font-sans h-screen flex flex-col overflow-hidden">
 
     <div id="login-screen" class="hidden flex-1 flex items-center justify-center p-6">
-        <div class="bg-slate-800 p-10 rounded-[2.5rem] w-full max-w-sm border border-slate-700 text-center shadow-2xl">
-            <h1 class="text-4xl font-extrabold text-blue-400 italic mb-6">Not Alone</h1>
-            <input id="username" placeholder="User Name" class="w-full bg-slate-900 p-4 rounded-2xl mb-4 outline-none border border-slate-700 focus:border-blue-500">
-            <input id="password" type="password" placeholder="Password" class="w-full bg-slate-900 p-4 rounded-2xl mb-6 outline-none border border-slate-700 focus:border-blue-500">
-            <button onclick="handleLogin()" class="w-full bg-blue-600 py-4 rounded-2xl font-bold active:scale-95 transition-all">Login</button>
+        <div class="bg-slate-800 p-8 rounded-[2rem] w-full max-w-sm border border-slate-700 text-center">
+            <h1 class="text-3xl font-black text-blue-400 italic mb-8">Not Alone</h1>
+            <input id="username" placeholder="Username" class="w-full bg-slate-900 p-4 rounded-xl mb-4 outline-none border border-slate-700">
+            <input id="password" type="password" placeholder="Password" class="w-full bg-slate-900 p-4 rounded-xl mb-6 outline-none border border-slate-700">
+            <button onclick="handleLogin()" class="w-full bg-blue-600 py-4 rounded-xl font-bold">Log In</button>
         </div>
     </div>
 
     <div id="start-screen" class="hidden flex-1 flex flex-col items-center justify-center p-6 relative">
-        <button onclick="logout()" class="absolute top-6 right-6 bg-red-900/30 text-red-400 px-5 py-2 rounded-full text-xs font-bold border border-red-900/50">Logout</button>
-        <h1 class="text-4xl font-bold text-blue-400 mb-2 italic">Not Alone</h1>
-        <p class="text-gray-400 mb-10 text-sm">ඔබට දැන් තනියක් නෑ.</p>
-        <button onclick="findRandomChat()" class="bg-blue-600 px-12 py-6 rounded-full text-xl font-bold shadow-xl shadow-blue-900/40 hover:scale-105 transition-all">Find Chat ➤</button>
+        <button onclick="logout()" class="absolute top-6 right-6 text-gray-500 text-xs">Logout</button>
+        <h1 class="text-5xl font-black text-blue-500 italic mb-2">Not Alone</h1>
+        <p class="text-gray-400 mb-12">Talk to strangers!</p>
+        <button onclick="findChat()" class="bg-white text-black px-10 py-5 rounded-full text-xl font-black shadow-2xl hover:bg-blue-400 transition-all">Find Chat</button>
     </div>
 
     <div id="loading-screen" class="hidden flex-1 flex flex-col items-center justify-center relative">
-        <button onclick="logout()" class="absolute top-6 right-6 bg-red-900/30 text-red-400 px-5 py-2 rounded-full text-xs font-bold border border-red-900/50">Logout</button>
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 mb-4"></div>
-        <p class="text-blue-400 font-bold animate-pulse">Searching for someone...</p>
+        <button onclick="logout()" class="absolute top-6 right-6 text-gray-500 text-xs">Logout</button>
+        <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="text-blue-400 font-bold">Looking for someone...</p>
     </div>
 
-    <div id="chat-screen" class="hidden flex flex-col h-full overflow-hidden">
-        <div class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center shadow-lg">
-            <span class="text-green-400 font-bold text-xs">● Connected</span>
-            <div class="flex gap-2">
-                <button onclick="location.reload()" class="bg-blue-600/20 text-blue-400 px-3 py-1.5 rounded-full text-[10px] font-bold border border-blue-600/30">New Chat</button>
-                <button onclick="endChat()" class="bg-red-600/20 text-red-400 px-3 py-1.5 rounded-full text-[10px] font-bold border border-red-600/30">End</button>
-                <button onclick="logout()" class="bg-gray-600/20 text-gray-400 px-3 py-1.5 rounded-full text-[10px] font-bold border border-gray-600/30">Logout</button>
-            </div>
+    <div id="chat-screen" class="hidden flex flex-col h-full">
+        <div class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
+            <span id="status-text" class="text-xs font-bold text-green-500 italic">● You're now chatting with a stranger.</span>
+            <button onclick="logout()" class="text-[10px] text-gray-500 uppercase">Logout</button>
         </div>
-        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-900"></div>
-        <div class="p-4 bg-slate-800 border-t border-slate-700 flex gap-2">
-            <input id="msg-input" placeholder="Type a message..." class="flex-1 bg-slate-900 p-4 rounded-2xl outline-none border border-slate-700 text-sm">
-            <button onclick="sendMsg()" class="bg-blue-600 px-6 rounded-2xl font-bold">➤</button>
-        </div>
-    </div>
+        
+        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-900"></div>
 
-    <div id="admin-panel" class="hidden flex-1 flex flex-col p-6">
-        <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-800">
-            <h2 class="text-xl font-bold text-blue-400">Admin Dashboard</h2>
-            <button onclick="logout()" class="bg-red-600 px-4 py-2 rounded-lg text-xs font-bold">Logout</button>
+        <div id="end-options" class="hidden p-8 text-center bg-slate-800 border-t border-slate-700">
+            <button onclick="location.reload()" class="bg-blue-600 px-8 py-3 rounded-full font-bold">Start a New Chat</button>
         </div>
-        <div id="user-list" class="flex-1 overflow-y-auto"></div>
+
+        <div id="msg-area" class="p-4 bg-slate-800 border-t border-slate-700 flex gap-2">
+            <button onclick="skipChat()" class="bg-red-900/30 text-red-400 px-4 rounded-xl font-bold text-xs border border-red-900/50">Skip</button>
+            <input id="msg-input" placeholder="Type message..." class="flex-1 bg-slate-900 p-4 rounded-xl outline-none border border-slate-700" onkeypress="if(event.key==='Enter') sendMsg()">
+            <button onclick="sendMsg()" class="bg-blue-600 px-6 rounded-xl font-bold">Send</button>
+        </div>
     </div>
 
 </body>
